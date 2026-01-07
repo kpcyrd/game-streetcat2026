@@ -4,9 +4,21 @@ pub mod shop;
 pub mod start;
 
 use crate::{game::campaign::Campaign, input::Event};
+use bitflags::bitflags;
 use core::fmt;
 use embedded_graphics::{pixelcolor::BinaryColor, prelude::DrawTarget};
 use embedded_savegame::storage::Flash;
+
+bitflags! {
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub struct Unlocks: u32 {
+        const FOO = 0b1 << 0;
+        const BAR = 0b1 << 1;
+        const ABC = 0b1 << 2;
+        const DEF = 0b1 << 3;
+        const XYZ = 0b1 << 4;
+    }
+}
 
 pub enum Game {
     Start(start::Start),

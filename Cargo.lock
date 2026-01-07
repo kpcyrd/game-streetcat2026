@@ -375,6 +375,7 @@ dependencies = [
 name = "game-minimeow"
 version = "0.1.0"
 dependencies = [
+ "bitflags",
  "ch32-hal",
  "eeprom24x",
  "embedded-graphics",

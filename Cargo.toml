@@ -17,6 +17,7 @@ opt-level = 's'
 overflow-checks = false
 
 [dependencies]
+bitflags = "2.10.0"
 ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", default-features = false, features = [
     "ch32v003f4p6",
     "time-driver-tim2",

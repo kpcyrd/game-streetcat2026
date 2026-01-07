@@ -1,4 +1,5 @@
 use crate::gfx;
+use core::fmt;
 use embedded_graphics::{
     Drawable,
     image::Image,
@@ -7,7 +8,6 @@ use embedded_graphics::{
     prelude::{DrawTarget, Point},
     text::{Baseline, Text},
 };
-use core::fmt;
 
 pub struct Fishing {}
 

@@ -9,7 +9,7 @@ use embedded_graphics::{
     mono_font::MonoTextStyle,
     pixelcolor::BinaryColor,
     prelude::{DrawTarget, Point},
-    text::{Alignment, Baseline, Text},
+    text::{Baseline, Text},
 };
 use embedded_savegame::storage::Flash;
 
@@ -90,11 +90,11 @@ impl Start {
         .unwrap();
 
         // Help
-        Text::with_alignment(
+        Text::with_baseline(
             "B: Cancel | A: Select",
-            Point::new(128, 64 - (FONT_HEIGHT / 2)),
+            Point::new(2, 64 - FONT_HEIGHT),
             MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
-            Alignment::Right,
+            Baseline::Top,
         )
         .draw(display)
         .unwrap();
