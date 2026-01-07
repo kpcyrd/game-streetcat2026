@@ -1,0 +1,34 @@
+[package]
+name = "game-minimeow"
+version = "0.1.0"
+edition = "2024"
+
+[profile.dev]
+opt-level = 's'
+
+[profile.release]
+strip = false     # symbols are not flashed to the microcontroller, so don't strip them.
+codegen-units = 1 # LLVM can perform better optimizations using a single thread
+debug = 2
+debug-assertions = false
+incremental = false
+lto = 'fat'
+opt-level = 's'
+overflow-checks = false
+
+[dependencies]
+ch32-hal = { git = "https://github.com/ch32-rs/ch32-hal.git", default-features = false, features = [
+    "ch32v003f4p6",
+    "time-driver-tim2",
+    "rt",
+    "memory-x",
+] }
+eeprom24x = "0.7.2"
+embedded-graphics = "0.8.1"
+embedded-hal = "1.0.0"
+embedded-hal-bus = "0.3.0"
+embedded-savegame = { git = "https://github.com/kpcyrd/embedded-savegame", features = ["eeprom24x"] }
+panic-halt = "1.0.0"
+qingke = "0.6.1"
+qingke-rt = "0.6.1"
+ssd1306 = "0.10.0"

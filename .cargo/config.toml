@@ -1,0 +1,8 @@
+[build]
+target = "riscv32ec-unknown-none-elf.json"
+
+[target."riscv32ec-unknown-none-elf"]
+runner = "wlink -v flash --enable-sdi-print --watch-serial"
+
+[unstable]
+build-std = ["core"]
