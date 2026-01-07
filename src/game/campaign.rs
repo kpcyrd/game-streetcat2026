@@ -1,5 +1,5 @@
 use crate::{
-    game::{Game, Unlocks},
+    game::{Game, Unlocks, story::Story},
     savegame::{SLOT_COUNT, SLOT_SIZE, Save},
 };
 use embedded_savegame::storage::{Flash, Storage};
@@ -46,8 +46,21 @@ impl<F: Flash> Campaign<F> {
 
         self.money = save.pull_u32(0);
         self.unlocks = Unlocks::from_bits_truncate(save.pull_u32(0));
-        self.write_savegame(); // TODO
 
-        self.next_scene = Some(Game::fishing());
+        // Start game
+        self.init_next();
+    }
+
+    pub fn init_next(&mut self) {
+        self.write_savegame();
+        self.next_scene = Some(self.scene());
+    }
+
+    fn scene(&self) -> Game {
+        if !self.unlocks.contains(Unlocks::STORY_INTRO) {
+            Game::Story(Story::new(&["abc", "def"], Unlocks::STORY_INTRO))
+        } else {
+            Game::fishing()
+        }
     }
 }

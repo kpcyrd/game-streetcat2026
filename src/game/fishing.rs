@@ -1,4 +1,8 @@
-use crate::{game::{Game, campaign::Campaign}, gfx, input::Event};
+use crate::{
+    game::{Game, campaign::Campaign},
+    gfx,
+    input::Event,
+};
 use core::fmt;
 use embedded_graphics::{
     Drawable,
