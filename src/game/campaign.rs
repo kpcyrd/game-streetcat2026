@@ -1,5 +1,5 @@
 use crate::{
-    game::Unlocks,
+    game::{Game, Unlocks},
     savegame::{SLOT_COUNT, SLOT_SIZE, Save},
 };
 use embedded_savegame::storage::{Flash, Storage};
@@ -9,6 +9,7 @@ pub struct Campaign<F: Flash> {
     pub save_slot: Option<embedded_savegame::Slot>,
     pub money: u32,
     pub unlocks: Unlocks,
+    pub next_scene: Option<Game>,
 }
 
 impl<F: Flash> Campaign<F> {
@@ -18,6 +19,7 @@ impl<F: Flash> Campaign<F> {
             save_slot: None,
             money: 0,
             unlocks: Unlocks::empty(),
+            next_scene: None,
         }
     }
 
@@ -46,6 +48,6 @@ impl<F: Flash> Campaign<F> {
         self.unlocks = Unlocks::from_bits_truncate(save.pull_u32(0));
         self.write_savegame(); // TODO
 
-        // self.flash.append(&mut [0]).unwrap();
+        self.next_scene = Some(Game::fishing());
     }
 }

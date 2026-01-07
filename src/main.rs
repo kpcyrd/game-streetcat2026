@@ -86,6 +86,8 @@ fn main() -> ! {
             None => (),
         }
 
+        game = campaign.next_scene.take().unwrap_or(game);
+
         /*
         // wait for interrupt
         riscv::asm::wfi();

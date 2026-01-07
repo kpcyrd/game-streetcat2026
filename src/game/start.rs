@@ -19,16 +19,16 @@ const ITEM_1: Point = Point::new(ITEM_LEFT_PAD, FONT_HEIGHT);
 const ITEM_2: Point = Point::new(ITEM_LEFT_PAD, FONT_HEIGHT * 2);
 
 pub struct Start {
-    item: bool,
+    new_game: bool,
 }
 
 impl Start {
     pub const fn new() -> Self {
-        Start { item: false }
+        Start { new_game: false }
     }
 
     fn toggle(&mut self) {
-        self.item = !self.item;
+        self.new_game = !self.new_game;
     }
 
     // State machine functions
@@ -37,13 +37,9 @@ impl Start {
             Event::Up => self.toggle(),
             Event::Down => self.toggle(),
             Event::A => {
-                if !self.item {
-                    // Continue selected
-                } else {
-                    // New Game selected
+                if self.new_game {
                     campaign.save_slot = None;
                 }
-
                 campaign.init();
             }
             Event::B => {}
@@ -75,7 +71,7 @@ impl Start {
         .unwrap();
 
         // Cursor
-        let point = if !self.item {
+        let point = if !self.new_game {
             Point::new(CURSOR_LEFT_PAD, ITEM_1.y)
         } else {
             Point::new(CURSOR_LEFT_PAD, ITEM_2.y)

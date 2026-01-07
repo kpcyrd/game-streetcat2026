@@ -12,6 +12,10 @@ use embedded_graphics::{
 pub struct Fishing {}
 
 impl Fishing {
+    pub const fn new() -> Self {
+        Fishing {}
+    }
+
     pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D)
     where
         <D as DrawTarget>::Error: fmt::Debug,

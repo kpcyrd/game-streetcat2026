@@ -31,6 +31,10 @@ impl Game {
         Game::Start(start::Start::new())
     }
 
+    pub const fn fishing() -> Self {
+        Game::Fishing(fishing::Fishing::new())
+    }
+
     pub fn event<F: Flash>(&mut self, event: Event, campaign: &mut Campaign<F>) {
         match self {
             Game::Start(s) => s.event(event, campaign),
