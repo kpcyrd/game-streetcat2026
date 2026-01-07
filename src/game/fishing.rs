@@ -17,7 +17,8 @@ use embedded_savegame::storage::Flash;
 const ESCAPE_THRESHOLD: i16 = -40;
 // Align the max with the RNG mask for good distribution
 const RNG_MASK: u32 = 0xFF;
-const MAX_WAIT_DURATION: i16 = 120;
+// const MAX_WAIT_DURATION: i16 = 120;
+const MAX_WAIT_DURATION: i16 = 12;
 
 pub struct Fishing {
     spawn_timer: i16,
@@ -86,6 +87,15 @@ impl Fishing {
         .unwrap();
 
         Image::new(&gfx::CAT, Point::new(4, 16))
+            .draw(display)
+            .unwrap();
+
+        // Fishing rod
+        let mut point = Point::new(64, 16);
+        if self.spawn_timer <= 0 && self.spawn_timer & 4 == 4 {
+            point += Point::new(0, 4);
+        }
+        Image::new(&gfx::FISHING, point)
             .draw(display)
             .unwrap();
     }
