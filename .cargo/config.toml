@@ -2,7 +2,7 @@
 target = "riscv32ec-unknown-none-elf.json"
 
 [target."riscv32ec-unknown-none-elf"]
-runner = "wlink -v flash --enable-sdi-print --watch-serial"
+runner = "wlink flash"
 
 [unstable]
 build-std = ["core"]

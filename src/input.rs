@@ -35,22 +35,4 @@ impl Button<'_> {
         }
         None
     }
-
-    /*
-    pub fn probe<F>(&mut self, f: F) -> Option<Action>
-    where
-        F: FnOnce() -> bool,
-    {
-        if f() {
-            if !self.on {
-                self.on = true;
-                return Some(Action::Pressed);
-            }
-        } else if self.on {
-            self.on = false;
-            return Some(Action::Released);
-        }
-        None
-    }
-    */
 }
