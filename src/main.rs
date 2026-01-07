@@ -58,7 +58,7 @@ fn main() -> ! {
     loop {
         // Render
         display.clear_buffer();
-        game.render(&mut display);
+        game.render(&mut display, &campaign);
         display.flush().unwrap();
 
         // Inputs

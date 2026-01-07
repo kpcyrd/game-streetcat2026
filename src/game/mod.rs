@@ -35,21 +35,25 @@ impl Game {
         Game::Fishing(fishing::Fishing::new())
     }
 
+    pub const fn shop() -> Self {
+        Game::Shop(shop::Shop::new())
+    }
+
     pub fn event<F: Flash>(&mut self, event: Event, campaign: &mut Campaign<F>) {
         match self {
             Game::Start(s) => s.event(event, campaign),
-            Game::Fishing(_f) => {}
-            Game::Shop(_s) => {}
+            Game::Fishing(f) => f.event(event, campaign),
+            Game::Shop(s) => s.event(event, campaign),
         }
     }
 
-    pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D)
+    pub fn render<D: DrawTarget<Color = BinaryColor>, F: Flash>(&self, display: &mut D, campaign: &Campaign<F>)
     where
         <D as DrawTarget>::Error: fmt::Debug,
     {
         match self {
             Game::Start(s) => s.render(display),
-            Game::Fishing(f) => f.render(display),
+            Game::Fishing(f) => f.render(display, campaign),
             Game::Shop(s) => s.render(display),
         }
     }
