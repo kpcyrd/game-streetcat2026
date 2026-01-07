@@ -2,6 +2,7 @@
 #![no_main]
 
 mod display;
+mod input;
 mod savegame;
 
 use ch32_hal::{
@@ -14,6 +15,7 @@ use ch32_hal::{
 use core::cell::RefCell;
 use embedded_graphics::{
     Drawable,
+    image::{Image, ImageRaw},
     mono_font::{MonoTextStyle, ascii::FONT_6X10},
     pixelcolor::BinaryColor,
     prelude::Point,
@@ -22,6 +24,8 @@ use embedded_graphics::{
 use embedded_hal_bus::i2c::RefCellDevice;
 use panic_halt as _;
 use ssd1306::prelude::*;
+
+use crate::input::{Action, Button};
 // use qingke::riscv;
 
 #[qingke_rt::entry]
@@ -51,36 +55,53 @@ fn main() -> ! {
     display.init().unwrap();
 
     // Buttons
-    let btn1 = Input::new(p.PA1, gpio::Pull::Up);
-    let btn2 = Input::new(p.PA2, gpio::Pull::Up);
-    let btn3 = Input::new(p.PC0, gpio::Pull::Up);
-    let btn4 = Input::new(p.PC4, gpio::Pull::Up);
+    let mut btn_up = Button::new(Input::new(p.PA1, gpio::Pull::Up));
+    let mut btn_down = Button::new(Input::new(p.PA2, gpio::Pull::Up));
+    let mut btn_b = Button::new(Input::new(p.PC0, gpio::Pull::Up));
+    let mut btn_a = Button::new(Input::new(p.PC4, gpio::Pull::Up));
 
     loop {
         display.clear_buffer();
 
         Text::with_baseline(
             "ohai!",
-            Point::new(0, 0),
+            Point::new(64, 0),
             MonoTextStyle::new(&FONT_6X10, BinaryColor::On),
             Baseline::Top,
         )
         .draw(&mut display)
         .unwrap();
 
+        const IMG: ImageRaw<BinaryColor> = ImageRaw::new(include_bytes!("../video/cat.raw"), 36);
+        Image::new(&IMG, Point::new(4, 16))
+            .draw(&mut display)
+            .unwrap();
+
         display.flush().unwrap();
 
-        if btn1.is_low() {
-            hal::println!("btn1 pressed");
+        // Inputs
+        match btn_up.probe() {
+            Some(Action::Pressed) => hal::println!("Up pressed"),
+            Some(Action::Released) => (),
+            None => (),
         }
-        if btn2.is_low() {
-            hal::println!("btn2 pressed");
+
+        match btn_down.probe() {
+            Some(Action::Pressed) => hal::println!("Down pressed"),
+            Some(Action::Released) => (),
+            None => (),
         }
-        if btn3.is_low() {
-            hal::println!("btn3 pressed");
+
+        match btn_b.probe() {
+            Some(Action::Pressed) => hal::println!("B pressed"),
+            Some(Action::Released) => (),
+            None => (),
         }
-        if btn4.is_low() {
-            hal::println!("btn4 pressed");
+
+        match btn_a.probe() {
+            Some(Action::Pressed) => hal::println!("A pressed"),
+            Some(Action::Released) => (),
+            None => (),
         }
 
         /*
@@ -94,10 +115,6 @@ fn main() -> ! {
         */
 
         /*
-        led.toggle();
-        delay.delay_ms(1000);
-        // hal::println!("toggle!");
-
         // wait for interrupt
         riscv::asm::wfi();
         */
