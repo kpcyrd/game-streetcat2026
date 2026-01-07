@@ -1,6 +1,6 @@
 use crate::{
     game::{Game, Unlocks, story::Story},
-    savegame::{SLOT_COUNT, SLOT_SIZE, Save},
+    savegame::{SAVE_SIZE, SLOT_COUNT, SLOT_SIZE, Save},
 };
 use embedded_savegame::storage::{Flash, Storage};
 
@@ -35,9 +35,9 @@ impl<F: Flash> Campaign<F> {
 
     pub fn write_savegame(&mut self) {
         let mut save = Save::new();
-        save.push_u32(self.money);
-        save.push_u32(self.unlocks.bits());
-        self.flash.append(save.slice()).unwrap();
+        save.set_money(self.money);
+        save.set_unlocks(self.unlocks.bits());
+        self.flash.append(&mut save.buf).unwrap();
     }
 
     pub fn init(&mut self) {
@@ -45,13 +45,14 @@ impl<F: Flash> Campaign<F> {
 
         if let Some(slot) = &self.save_slot
             && let Some(slice) = self.flash.read(slot.idx, &mut save.buf).unwrap()
+            && slice.len() != SAVE_SIZE
         {
-            let len = slice.len();
-            save.reset(len);
+            save.set_money(0);
+            save.set_unlocks(0);
         }
 
-        self.money = save.pull_u32(0);
-        self.unlocks = Unlocks::from_bits_truncate(save.pull_u32(0));
+        self.money = save.get_money();
+        self.unlocks = Unlocks::from_bits_truncate(save.get_unlocks());
 
         // Start game
         self.init_next();

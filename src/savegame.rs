@@ -12,66 +12,38 @@ pub fn setup<I2C: embedded_hal::i2c::I2c>(
     Storage::<_, SLOT_SIZE, SLOT_COUNT>::new(eeprom)
 }
 
-// Maximum size we are willing to save/load
-const SAVE_SIZE: usize = 256;
+// Exact size of our savegame data
+pub const SAVE_SIZE: usize = 8;
 
-#[derive(Clone, Copy)]
 pub struct Save {
     pub buf: [u8; SAVE_SIZE],
-    pub cursor: usize,
-    pub capacity: usize,
 }
 
 impl Save {
     pub const fn new() -> Self {
         Self {
             buf: [0; SAVE_SIZE],
-            cursor: 0,
-            capacity: 0,
         }
     }
 
-    pub fn reset(&mut self, capacity: usize) {
-        self.capacity = capacity;
-        self.cursor = 0;
+    pub fn set_money(&mut self, money: u32) {
+        let buf = arrayref::array_mut_ref![self.buf, 0, 4];
+        buf.copy_from_slice(&money.to_be_bytes());
     }
 
-    // This is needed because embedded-savegame currently expects this because of w25q
-    pub fn slice(&mut self) -> &mut [u8] {
-        &mut self.buf[..self.capacity]
+    pub fn set_unlocks(&mut self, unlocks: u32) {
+        let buf = arrayref::array_mut_ref![self.buf, 4, 4];
+        buf.copy_from_slice(&unlocks.to_be_bytes());
     }
 
-    fn take(&mut self, amount: usize) -> Option<&[u8]> {
-        let slice = self
-            .buf
-            .get(..self.capacity)
-            .unwrap_or_default()
-            .get(self.cursor..)
-            .unwrap_or_default()
-            .get(..amount);
-        self.cursor = self.cursor.saturating_add(amount);
-        slice
+    pub fn get_money(&self) -> u32 {
+        let buf = arrayref::array_ref![self.buf, 0, 4];
+        u32::from_be_bytes(*buf)
     }
 
-    pub fn pull_u32(&mut self, default: u32) -> u32 {
-        if let Some(value) = self.take(4) {
-            u32::from_be_bytes(value.try_into().unwrap())
-        } else {
-            default
-        }
-    }
-
-    fn push(&mut self, buf: &[u8]) {
-        let range = self.cursor..self.cursor + buf.len();
-        if let Some(slice) = self.buf.get_mut(range) {
-            slice.copy_from_slice(buf);
-            self.cursor = self.cursor.saturating_add(buf.len());
-            self.capacity = self.cursor;
-        }
-    }
-
-    pub fn push_u32(&mut self, value: u32) {
-        self.push(&value.to_be_bytes());
+    pub fn get_unlocks(&self) -> u32 {
+        let buf = arrayref::array_ref![self.buf, 4, 4];
+        u32::from_be_bytes(*buf)
     }
 }
 

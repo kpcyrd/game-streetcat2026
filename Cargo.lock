@@ -375,6 +375,7 @@ dependencies = [
 name = "game-minimeow"
 version = "0.1.0"
 dependencies = [
+ "arrayref",
  "bitflags",
  "ch32-hal",
  "djb2",
