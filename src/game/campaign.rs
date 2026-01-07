@@ -9,6 +9,7 @@ pub struct Campaign<F: Flash> {
     pub save_slot: Option<embedded_savegame::Slot>,
     pub money: u32,
     pub unlocks: Unlocks,
+    pub rng: u32,
     pub next_scene: Option<Game>,
 }
 
@@ -19,8 +20,13 @@ impl<F: Flash> Campaign<F> {
             save_slot: None,
             money: 0,
             unlocks: Unlocks::empty(),
+            rng: djb2::hash(&[]),
             next_scene: None,
         }
+    }
+
+    pub fn feed_rng(&mut self) {
+        self.rng = djb2::hash_with_initial(self.rng, &[0xFF]);
     }
 
     pub fn scan_savegames(&mut self) {

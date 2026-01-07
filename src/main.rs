@@ -87,6 +87,7 @@ fn main() -> ! {
         }
 
         game = campaign.next_scene.take().unwrap_or(game);
+        game.tick(&mut campaign);
 
         /*
         // wait for interrupt

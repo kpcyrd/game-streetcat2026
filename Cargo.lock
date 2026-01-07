@@ -377,6 +377,7 @@ version = "0.1.0"
 dependencies = [
  "bitflags",
  "ch32-hal",
+ "djb2",
  "eeprom24x",
  "embedded-graphics",
  "embedded-hal 1.0.0",

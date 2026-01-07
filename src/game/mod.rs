@@ -53,6 +53,16 @@ impl Game {
         }
     }
 
+    pub fn tick<F: Flash>(&mut self, campaign: &mut Campaign<F>) {
+        match self {
+            Game::Start(_s) => (),
+            Game::Fishing(_f) => (),
+            Game::Shop(_s) => (),
+            Game::Story(_s) => (),
+        }
+        campaign.feed_rng();
+    }
+
     pub fn render<D: DrawTarget<Color = BinaryColor>, F: Flash>(
         &self,
         display: &mut D,

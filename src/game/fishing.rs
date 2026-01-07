@@ -43,7 +43,8 @@ impl Fishing {
         <D as DrawTarget>::Error: fmt::Debug,
     {
         let mut buf = itoa::Buffer::new();
-        let txt = buf.format(campaign.money);
+        // let txt = buf.format(campaign.money);
+        let txt = buf.format(campaign.rng);
 
         Text::with_baseline(
             txt,
