@@ -1,5 +1,13 @@
 use ch32_hal::gpio::Input;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Event {
+    Up,
+    Down,
+    A,
+    B,
+}
+
 pub enum Action {
     Pressed,
     Released,
