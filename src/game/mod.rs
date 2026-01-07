@@ -56,7 +56,7 @@ impl Game {
     pub fn tick<F: Flash>(&mut self, campaign: &mut Campaign<F>) {
         match self {
             Game::Start(_s) => (),
-            Game::Fishing(_f) => (),
+            Game::Fishing(f) => f.tick(campaign),
             Game::Shop(_s) => (),
             Game::Story(_s) => (),
         }
