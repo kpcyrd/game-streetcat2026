@@ -40,8 +40,9 @@ impl Story {
     where
         <D as DrawTarget>::Error: fmt::Debug,
     {
-        for (i, line) in self.lines.iter().enumerate() {
-            let point = Point::new(0, FONT_HEIGHT * i as i32);
+        let mut point = Point::new(0, 0);
+
+        for line in self.lines {
             Text::with_baseline(
                 line,
                 point,
@@ -50,6 +51,7 @@ impl Story {
             )
             .draw(display)
             .unwrap();
+            point += Point::new(0, FONT_HEIGHT);
         }
     }
 }
