@@ -4,12 +4,12 @@ use crate::{
 };
 use embedded_savegame::storage::{Flash, Storage};
 
-const CORPORATE_ESCAPE_THRESHOLD: u32 = 50;
+const CORPORATE_ESCAPE_THRESHOLD: u16 = 50;
 
 pub struct Campaign<F: Flash> {
     pub flash: Storage<F, SLOT_SIZE, SLOT_COUNT>,
     pub save_slot: Option<embedded_savegame::Slot>,
-    pub money: u32,
+    pub money: u16,
     pub unlocks: Unlocks,
     pub rng: u32,
     pub next_scene: Option<Game>,

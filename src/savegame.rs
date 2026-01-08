@@ -13,7 +13,7 @@ pub fn setup<I2C: embedded_hal::i2c::I2c>(
 }
 
 // Exact size of our savegame data
-pub const SAVE_SIZE: usize = 8;
+pub const SAVE_SIZE: usize = 4;
 
 pub struct Save {
     pub buf: [u8; SAVE_SIZE],
@@ -26,24 +26,24 @@ impl Save {
         }
     }
 
-    pub fn set_money(&mut self, money: u32) {
-        let buf = arrayref::array_mut_ref![self.buf, 0, 4];
+    pub fn set_money(&mut self, money: u16) {
+        let buf = arrayref::array_mut_ref![self.buf, 0, 2];
         buf.copy_from_slice(&money.to_be_bytes());
     }
 
-    pub fn set_unlocks(&mut self, unlocks: u32) {
-        let buf = arrayref::array_mut_ref![self.buf, 4, 4];
+    pub fn set_unlocks(&mut self, unlocks: u16) {
+        let buf = arrayref::array_mut_ref![self.buf, 2, 2];
         buf.copy_from_slice(&unlocks.to_be_bytes());
     }
 
-    pub fn get_money(&self) -> u32 {
-        let buf = arrayref::array_ref![self.buf, 0, 4];
-        u32::from_be_bytes(*buf)
+    pub fn get_money(&self) -> u16 {
+        let buf = arrayref::array_ref![self.buf, 0, 2];
+        u16::from_be_bytes(*buf)
     }
 
-    pub fn get_unlocks(&self) -> u32 {
-        let buf = arrayref::array_ref![self.buf, 4, 4];
-        u32::from_be_bytes(*buf)
+    pub fn get_unlocks(&self) -> u16 {
+        let buf = arrayref::array_ref![self.buf, 2, 2];
+        u16::from_be_bytes(*buf)
     }
 }
 

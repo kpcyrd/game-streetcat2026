@@ -12,7 +12,7 @@ use embedded_savegame::storage::Flash;
 
 bitflags! {
     #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-    pub struct Unlocks: u32 {
+    pub struct Unlocks: u16 {
         // The first dialogue
         const STORY_INTRO = 0b1 << 0;
         // The email minigame
