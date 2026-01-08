@@ -50,7 +50,7 @@ impl Story {
                 Baseline::Top,
             )
             .draw(display)
-            .unwrap();
+            .ok();
             point += Point::new(0, FONT_HEIGHT);
         }
     }

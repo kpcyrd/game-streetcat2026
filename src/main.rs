@@ -43,7 +43,7 @@ fn main() -> ! {
 
     // Setup screen
     let mut display = display::setup(i2c_b).into_buffered_graphics_mode();
-    display.init().unwrap();
+    display.init().ok();
 
     // Buttons
     let mut btn_up = Button::new(Input::new(p.PA1, gpio::Pull::Up));
@@ -59,7 +59,7 @@ fn main() -> ! {
         // Render
         display.clear_buffer();
         game.render(&mut display, &campaign);
-        display.flush().unwrap();
+        display.flush().ok();
 
         // Inputs
         match btn_up.probe() {

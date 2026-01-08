@@ -43,10 +43,10 @@ impl Shop {
             Baseline::Top,
         )
         .draw(display)
-        .unwrap();
+        .ok();
 
         Image::new(&gfx::CAT, Point::new(4, 16))
             .draw(display)
-            .unwrap();
+            .ok();
     }
 }
