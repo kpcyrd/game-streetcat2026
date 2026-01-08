@@ -1,5 +1,5 @@
 use crate::{
-    game::{Game, Unlocks, campaign::Campaign},
+    game::{Game, campaign::Campaign},
     gfx,
     input::Event,
 };
@@ -59,7 +59,7 @@ impl Fishing {
     }
 
     pub fn tick<F: Flash>(&mut self, campaign: &mut Campaign<F>) {
-        if self.spawn_timer < ESCAPE_THRESHOLD {
+        if self.spawn_timer < ESCAPE_THRESHOLD && campaign.escaped_corporate() {
             // Fish escaped
             self.setup_spawn_timer(campaign);
         } else {
@@ -75,7 +75,7 @@ impl Fishing {
     ) where
         <D as DrawTarget>::Error: fmt::Debug,
     {
-        if campaign.unlocks.contains(Unlocks::STORY_ESCAPED_CORPORATE) {
+        if campaign.escaped_corporate() {
             let mut buf = itoa::Buffer::new();
             // let txt = buf.format(campaign.money);
             let txt = buf.format(self.spawn_timer);
@@ -90,11 +90,9 @@ impl Fishing {
             .ok();
         }
 
-        Image::new(&gfx::CAT, Point::new(4, 16))
-            .draw(display)
-            .ok();
+        Image::new(&gfx::CAT, Point::new(4, 16)).draw(display).ok();
 
-        if campaign.unlocks.contains(Unlocks::STORY_ESCAPED_CORPORATE) {
+        if campaign.escaped_corporate() {
             // Fishing rod
             let mut point = Point::new(64, 16);
             if self.spawn_timer <= 0 && self.spawn_timer & 4 == 4 {
