@@ -87,7 +87,6 @@ impl Fishing {
             let txt = buf.format(self.spawn_timer);
             */
             let txt = "TODO";
-
             Text::with_baseline(
                 txt,
                 Point::new(64, 0),
@@ -96,11 +95,7 @@ impl Fishing {
             )
             .draw(display)
             .ok();
-        }
 
-        Image::new(&gfx::CAT, Point::new(4, 16)).draw(display).ok();
-
-        if campaign.escaped_corporate() {
             // Fishing rod
             let mut point = Point::new(64, 16);
             if self.spawn_timer <= 0 && self.spawn_timer & 4 == 4 {
@@ -119,6 +114,29 @@ impl Fishing {
                 .draw(display)
                 .ok();
             }
+
+            if campaign.can_escape_corporate() {
+                Text::with_baseline(
+                    "B: Escape",
+                    Point::new(2, 64 - gfx::FONT_HEIGHT),
+                    MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
+                    Baseline::Top,
+                )
+                .draw(display)
+                .ok();
+            }
+
+            Text::with_baseline(
+                "| A: Delete",
+                Point::new(62, 64 - gfx::FONT_HEIGHT),
+                MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
+                Baseline::Top,
+            )
+            .draw(display)
+            .ok();
         }
+
+        // Draw cat
+        Image::new(&gfx::CAT, Point::new(4, 16)).draw(display).ok();
     }
 }
