@@ -1,5 +1,5 @@
 use crate::{
-    game::{Game, campaign::Campaign},
+    game::{Game, Unlocks, campaign::Campaign},
     gfx,
     input::Event,
 };
@@ -53,6 +53,11 @@ impl Fishing {
             Event::B => {
                 if campaign.escaped_corporate() {
                     campaign.next_scene = Some(Game::shop());
+                } else if campaign.can_escape_corporate() {
+                    // Escape corporate
+                    campaign.money = 0;
+                    campaign.unlocks.insert(Unlocks::STORY_ESCAPED_CORPORATE);
+                    campaign.init_next();
                 }
             }
         }
@@ -76,9 +81,12 @@ impl Fishing {
         <D as DrawTarget>::Error: fmt::Debug,
     {
         if campaign.escaped_corporate() {
+            /*
             let mut buf = itoa::Buffer::new();
             // let txt = buf.format(campaign.money);
             let txt = buf.format(self.spawn_timer);
+            */
+            let txt = "TODO";
 
             Text::with_baseline(
                 txt,

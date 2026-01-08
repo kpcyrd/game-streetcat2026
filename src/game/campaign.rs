@@ -4,6 +4,8 @@ use crate::{
 };
 use embedded_savegame::storage::{Flash, Storage};
 
+const CORPORATE_ESCAPE_THRESHOLD: u32 = 50;
+
 pub struct Campaign<F: Flash> {
     pub flash: Storage<F, SLOT_SIZE, SLOT_COUNT>,
     pub save_slot: Option<embedded_savegame::Slot>,
@@ -73,5 +75,9 @@ impl<F: Flash> Campaign<F> {
 
     pub const fn escaped_corporate(&self) -> bool {
         self.unlocks.contains(Unlocks::STORY_ESCAPED_CORPORATE)
+    }
+
+    pub const fn can_escape_corporate(&self) -> bool {
+        self.money >= CORPORATE_ESCAPE_THRESHOLD
     }
 }
