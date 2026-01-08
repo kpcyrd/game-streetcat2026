@@ -6,7 +6,6 @@ pub mod story;
 
 use crate::{game::campaign::Campaign, input::Event};
 use bitflags::bitflags;
-use core::fmt;
 use embedded_graphics::{pixelcolor::BinaryColor, prelude::DrawTarget};
 use embedded_savegame::storage::Flash;
 
@@ -71,9 +70,7 @@ impl Game {
         &self,
         display: &mut D,
         campaign: &Campaign<F>,
-    ) where
-        <D as DrawTarget>::Error: fmt::Debug,
-    {
+    ) {
         match self {
             Game::Start(s) => s.render(display),
             Game::Fishing(f) => f.render(display, campaign),

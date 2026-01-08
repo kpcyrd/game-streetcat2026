@@ -3,7 +3,6 @@ use crate::{
     gfx::{self, FONT_HEIGHT},
     input::Event,
 };
-use core::fmt;
 use embedded_graphics::{
     Drawable,
     mono_font::MonoTextStyle,
@@ -36,10 +35,7 @@ impl Story {
         }
     }
 
-    pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D)
-    where
-        <D as DrawTarget>::Error: fmt::Debug,
-    {
+    pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D) {
         let mut point = Point::new(0, 0);
 
         for line in self.lines {

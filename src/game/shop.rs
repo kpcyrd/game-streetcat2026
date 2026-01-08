@@ -3,7 +3,6 @@ use crate::{
     gfx,
     input::Event,
 };
-use core::fmt;
 use embedded_graphics::{
     Drawable,
     image::Image,
@@ -32,10 +31,7 @@ impl Shop {
         }
     }
 
-    pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D)
-    where
-        <D as DrawTarget>::Error: fmt::Debug,
-    {
+    pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D) {
         Text::with_baseline(
             "shop!",
             Point::new(64, 0),
@@ -45,8 +41,6 @@ impl Shop {
         .draw(display)
         .ok();
 
-        Image::new(&gfx::CAT, Point::new(4, 16))
-            .draw(display)
-            .ok();
+        Image::new(&gfx::CAT, Point::new(4, 16)).draw(display).ok();
     }
 }

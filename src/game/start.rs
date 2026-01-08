@@ -3,7 +3,6 @@ use crate::{
     gfx::{self, FONT_HEIGHT},
     input::Event,
 };
-use core::fmt;
 use embedded_graphics::{
     Drawable,
     mono_font::MonoTextStyle,
@@ -46,10 +45,7 @@ impl Start {
         }
     }
 
-    pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D)
-    where
-        <D as DrawTarget>::Error: fmt::Debug,
-    {
+    pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D) {
         // Continue
         Text::with_baseline(
             "Continue",

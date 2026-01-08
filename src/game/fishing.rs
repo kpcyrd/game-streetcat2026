@@ -3,7 +3,7 @@ use crate::{
     gfx,
     input::Event,
 };
-use core::{cmp, fmt};
+use core::cmp;
 use embedded_graphics::{
     Drawable,
     image::Image,
@@ -77,9 +77,7 @@ impl Fishing {
         &self,
         display: &mut D,
         campaign: &Campaign<F>,
-    ) where
-        <D as DrawTarget>::Error: fmt::Debug,
-    {
+    ) {
         if campaign.escaped_corporate() {
             /*
             let mut buf = itoa::Buffer::new();
