@@ -95,8 +95,6 @@ impl Fishing {
         if self.spawn_timer <= 0 && self.spawn_timer & 4 == 4 {
             point += Point::new(0, 4);
         }
-        Image::new(&gfx::FISHING, point)
-            .draw(display)
-            .unwrap();
+        Image::new(&gfx::FISHING, point).draw(display).unwrap();
     }
 }
