@@ -1,5 +1,5 @@
 use crate::{
-    game::{Game, campaign::Campaign},
+    game::{Game, Unlocks, campaign::Campaign},
     gfx,
     input::Event,
 };
@@ -51,7 +51,9 @@ impl Fishing {
                 }
             }
             Event::B => {
-                campaign.next_scene = Some(Game::shop());
+                if campaign.escaped_corporate() {
+                    campaign.next_scene = Some(Game::shop());
+                }
             }
         }
     }
@@ -69,32 +71,48 @@ impl Fishing {
     pub fn render<D: DrawTarget<Color = BinaryColor>, F: Flash>(
         &self,
         display: &mut D,
-        _campaign: &Campaign<F>,
+        campaign: &Campaign<F>,
     ) where
         <D as DrawTarget>::Error: fmt::Debug,
     {
-        let mut buf = itoa::Buffer::new();
-        // let txt = buf.format(campaign.money);
-        let txt = buf.format(self.spawn_timer);
+        if campaign.unlocks.contains(Unlocks::STORY_ESCAPED_CORPORATE) {
+            let mut buf = itoa::Buffer::new();
+            // let txt = buf.format(campaign.money);
+            let txt = buf.format(self.spawn_timer);
 
-        Text::with_baseline(
-            txt,
-            Point::new(64, 0),
-            MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
-            Baseline::Top,
-        )
-        .draw(display)
-        .unwrap();
+            Text::with_baseline(
+                txt,
+                Point::new(64, 0),
+                MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
+                Baseline::Top,
+            )
+            .draw(display)
+            .ok();
+        }
 
         Image::new(&gfx::CAT, Point::new(4, 16))
             .draw(display)
-            .unwrap();
+            .ok();
 
-        // Fishing rod
-        let mut point = Point::new(64, 16);
-        if self.spawn_timer <= 0 && self.spawn_timer & 4 == 4 {
-            point += Point::new(0, 4);
+        if campaign.unlocks.contains(Unlocks::STORY_ESCAPED_CORPORATE) {
+            // Fishing rod
+            let mut point = Point::new(64, 16);
+            if self.spawn_timer <= 0 && self.spawn_timer & 4 == 4 {
+                point += Point::new(0, 4);
+            }
+            Image::new(&gfx::FISHING, point).draw(display).ok();
+        } else {
+            // Email
+            if self.spawn_timer <= 0 {
+                Text::with_baseline(
+                    "New Email!",
+                    Point::new(60, 8),
+                    MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
+                    Baseline::Top,
+                )
+                .draw(display)
+                .ok();
+            }
         }
-        Image::new(&gfx::FISHING, point).draw(display).unwrap();
     }
 }

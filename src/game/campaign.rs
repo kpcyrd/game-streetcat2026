@@ -37,7 +37,7 @@ impl<F: Flash> Campaign<F> {
         let mut save = Save::new();
         save.set_money(self.money);
         save.set_unlocks(self.unlocks.bits());
-        self.flash.append(&mut save.buf).unwrap();
+        self.flash.append(&mut save.buf).ok();
     }
 
     pub fn init(&mut self) {
@@ -69,5 +69,9 @@ impl<F: Flash> Campaign<F> {
         } else {
             Game::fishing()
         }
+    }
+
+    pub const fn escaped_corporate(&self) -> bool {
+        self.unlocks.contains(Unlocks::STORY_ESCAPED_CORPORATE)
     }
 }

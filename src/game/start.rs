@@ -58,7 +58,7 @@ impl Start {
             Baseline::Top,
         )
         .draw(display)
-        .unwrap();
+        .ok();
 
         // New Game
         Text::with_baseline(
@@ -68,7 +68,7 @@ impl Start {
             Baseline::Top,
         )
         .draw(display)
-        .unwrap();
+        .ok();
 
         // Cursor
         let point = if !self.new_game {
@@ -83,7 +83,7 @@ impl Start {
             Baseline::Top,
         )
         .draw(display)
-        .unwrap();
+        .ok();
 
         // Help
         Text::with_baseline(
@@ -93,6 +93,6 @@ impl Start {
             Baseline::Top,
         )
         .draw(display)
-        .unwrap();
+        .ok();
     }
 }
