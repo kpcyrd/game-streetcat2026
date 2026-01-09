@@ -26,6 +26,15 @@ const MAX_WAIT_DURATION: i16 = 12;
 // Returning from the shop explicitly uses i16::MIN to prevent cheating.
 const GOOD_START_VALUE: i16 = 35;
 
+// The default position if we don't render any extras
+const STANDARD_CAT_POSITION: Point = Point::new(8, 16);
+// The size of the cat image
+const CAT_HEIGHT: i32 = 30;
+// The office cat offset (higher to make room for the necktie)
+const OFFICE_CAT_OFFSET: Point = Point::new(0, 10);
+// The necktie position relative to the office cat
+const NECKTIE_OFFSET: Point = Point::new(17, CAT_HEIGHT + 1);
+
 pub enum Timer {
     Random,
     Onboarding,
@@ -92,7 +101,7 @@ impl Fishing {
         display: &mut D,
         campaign: &Campaign<F>,
     ) {
-        if campaign.escaped_corporate() {
+        let cat_point = if campaign.escaped_corporate() {
             /*
             let mut buf = itoa::Buffer::new();
             // let txt = buf.format(campaign.money);
@@ -114,6 +123,9 @@ impl Fishing {
                 point += Point::new(0, 4);
             }
             Image::new(&gfx::FISHING, point).draw(display).ok();
+
+            // The cat position
+            STANDARD_CAT_POSITION
         } else {
             // Email
             if self.spawn_timer <= 0 {
@@ -146,9 +158,19 @@ impl Fishing {
             )
             .draw(display)
             .ok();
-        }
+
+            // The cat position (slightly higher)
+            let cat_position = STANDARD_CAT_POSITION - OFFICE_CAT_OFFSET;
+
+            // Draw the necktie (height = 15px, width = 7px)
+            let necktie_point = cat_position + NECKTIE_OFFSET;
+            Image::new(&gfx::NECKTIE, necktie_point).draw(display).ok();
+
+            // Return the postion and proceed rendering the cat
+            cat_position
+        };
 
         // Draw cat
-        Image::new(&gfx::CAT, Point::new(4, 16)).draw(display).ok();
+        Image::new(&gfx::CAT, cat_point).draw(display).ok();
     }
 }
