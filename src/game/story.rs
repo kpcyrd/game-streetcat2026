@@ -1,6 +1,6 @@
 use crate::{
     game::{Unlocks, campaign::Campaign},
-    gfx::{self, FONT_HEIGHT},
+    gfx,
     input::Event,
 };
 use embedded_graphics::{
@@ -13,12 +13,12 @@ use embedded_graphics::{
 use embedded_savegame::storage::Flash;
 
 pub struct Story {
-    lines: &'static [&'static str],
+    lines: &'static str,
     unlock: Unlocks,
 }
 
 impl Story {
-    pub const fn new(lines: &'static [&'static str], unlock: Unlocks) -> Self {
+    pub const fn new(lines: &'static str, unlock: Unlocks) -> Self {
         Story { lines, unlock }
     }
 
@@ -36,18 +36,13 @@ impl Story {
     }
 
     pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D) {
-        let mut point = Point::new(0, 0);
-
-        for line in self.lines {
-            Text::with_baseline(
-                line,
-                point,
-                MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
-                Baseline::Top,
-            )
-            .draw(display)
-            .ok();
-            point += Point::new(0, FONT_HEIGHT);
-        }
+        Text::with_baseline(
+            self.lines,
+            Point::zero(),
+            MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
+            Baseline::Top,
+        )
+        .draw(display)
+        .ok();
     }
 }
