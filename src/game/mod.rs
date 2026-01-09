@@ -16,6 +16,8 @@ bitflags! {
         const STORY_INTRO = 0b1 << 0;
         // The email minigame
         const STORY_ESCAPED_CORPORATE = 0b1 << 1;
+        // Further instructions
+        const STORY_ACKNOWLEDGED_ESCAPE = 0b1 << 2;
 
         /*
         const FOO = 0b1 << 0;

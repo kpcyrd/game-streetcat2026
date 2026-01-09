@@ -67,7 +67,23 @@ impl<F: Flash> Campaign<F> {
 
     const fn scene(&self) -> Game {
         if !self.unlocks.contains(Unlocks::STORY_INTRO) {
-            Game::Story(Story::new(&["abc", "def"], Unlocks::STORY_INTRO))
+            Game::Story(Story::new(
+                &[
+                    "You wake up in your",
+                    "corporate job.",
+                    "",
+                    "Your job is to",
+                    "delete emails.",
+                ],
+                Unlocks::STORY_INTRO,
+            ))
+        } else if self.escaped_corporate()
+            && !self.unlocks.contains(Unlocks::STORY_ACKNOWLEDGED_ESCAPE)
+        {
+            Game::Story(Story::new(
+                &["You are free!", "", "Now what?"],
+                Unlocks::STORY_ACKNOWLEDGED_ESCAPE,
+            ))
         } else {
             Game::fishing()
         }
