@@ -26,7 +26,7 @@ impl Start {
         Start { new_game: false }
     }
 
-    fn toggle(&mut self) {
+    const fn toggle(&mut self) {
         self.new_game = !self.new_game;
     }
 

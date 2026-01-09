@@ -27,7 +27,7 @@ impl<F: Flash> Campaign<F> {
         }
     }
 
-    pub fn feed_rng(&mut self) {
+    pub const fn feed_rng(&mut self) {
         self.rng = djb2::hash_with_initial(self.rng, &[0xFF]);
     }
 
@@ -65,7 +65,7 @@ impl<F: Flash> Campaign<F> {
         self.next_scene = Some(self.scene());
     }
 
-    fn scene(&self) -> Game {
+    const fn scene(&self) -> Game {
         if !self.unlocks.contains(Unlocks::STORY_INTRO) {
             Game::Story(Story::new(&["abc", "def"], Unlocks::STORY_INTRO))
         } else {

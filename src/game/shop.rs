@@ -20,7 +20,7 @@ impl Shop {
         Shop {}
     }
 
-    pub fn event<F: Flash>(&mut self, event: Event, campaign: &mut Campaign<F>) {
+    pub const fn event<F: Flash>(&mut self, event: Event, campaign: &mut Campaign<F>) {
         match event {
             Event::Up => (),
             Event::Down => (),
