@@ -32,7 +32,7 @@ impl<F: Flash> Campaign<F> {
     }
 
     pub fn scan_savegames(&mut self) {
-        self.save_slot = self.flash.scan().unwrap();
+        self.save_slot = self.flash.scan().ok().flatten();
     }
 
     pub fn write_savegame(&mut self) {
@@ -46,7 +46,7 @@ impl<F: Flash> Campaign<F> {
         let mut save = Save::new();
 
         if let Some(slot) = &self.save_slot
-            && let Some(slice) = self.flash.read(slot.idx, &mut save.buf).unwrap()
+            && let Ok(Some(slice)) = self.flash.read(slot.idx, &mut save.buf)
             && slice.len() != SAVE_SIZE
         {
             save.set_money(0);
