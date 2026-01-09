@@ -20,14 +20,28 @@ const RNG_MASK: u32 = 0xFF;
 // const MAX_WAIT_DURATION: i16 = 120;
 const MAX_WAIT_DURATION: i16 = 12;
 
+// With i16::MIN the fish would immediately escape, resetting the timer
+// But with the email mingame, we want to start with a reasonable timer.
+//
+// Returning from the shop explicitly uses i16::MIN to prevent cheating.
+const GOOD_START_VALUE: i16 = 35;
+
+pub enum Timer {
+    Random,
+    Onboarding,
+}
+
 pub struct Fishing {
     spawn_timer: i16,
 }
 
 impl Fishing {
-    pub const fn new() -> Self {
+    pub const fn new(timer: Timer) -> Self {
         Fishing {
-            spawn_timer: i16::MIN,
+            spawn_timer: match timer {
+                Timer::Random => u16::MAX as i16,
+                Timer::Onboarding => GOOD_START_VALUE,
+            },
         }
     }
 

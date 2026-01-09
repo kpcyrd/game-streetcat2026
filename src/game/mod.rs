@@ -41,8 +41,8 @@ impl Game {
         Game::Start(start::Start::new())
     }
 
-    pub const fn fishing() -> Self {
-        Game::Fishing(fishing::Fishing::new())
+    pub const fn fishing(timer: fishing::Timer) -> Self {
+        Game::Fishing(fishing::Fishing::new(timer))
     }
 
     pub const fn shop() -> Self {

@@ -1,5 +1,5 @@
 use crate::{
-    game::{Game, campaign::Campaign},
+    game::{Game, campaign::Campaign, fishing},
     gfx,
     input::Event,
 };
@@ -26,7 +26,7 @@ impl Shop {
             Event::Down => (),
             Event::A => (),
             Event::B => {
-                campaign.next_scene = Some(Game::fishing());
+                campaign.next_scene = Some(Game::fishing(fishing::Timer::Random));
             }
         }
     }

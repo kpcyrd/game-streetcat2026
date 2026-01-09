@@ -1,5 +1,5 @@
 use crate::{
-    game::{Game, Unlocks, story::Story},
+    game::{Game, Unlocks, fishing, story::Story},
     savegame::{SAVE_SIZE, SLOT_COUNT, SLOT_SIZE, Save},
 };
 use embedded_savegame::storage::{Flash, Storage};
@@ -85,7 +85,7 @@ impl<F: Flash> Campaign<F> {
                 Unlocks::STORY_ACKNOWLEDGED_ESCAPE,
             ))
         } else {
-            Game::fishing()
+            Game::fishing(fishing::Timer::Onboarding)
         }
     }
 
