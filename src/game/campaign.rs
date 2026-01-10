@@ -39,7 +39,7 @@ impl<F: Flash> Campaign<F> {
         let mut save = Save::new();
         save.set_money(self.money);
         save.set_unlocks(self.unlocks.bits());
-        self.flash.append(&mut save.buf).ok();
+        self.flash.append_static(&mut save.buf).ok();
     }
 
     pub fn init(&mut self) {

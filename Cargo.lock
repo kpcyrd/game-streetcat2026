@@ -276,7 +276,7 @@ dependencies = [
 [[package]]
 name = "embedded-savegame"
 version = "0.2.0"
-source = "git+https://github.com/kpcyrd/embedded-savegame#fc55c3955fbd693cd84a9410e60f89cea67602be"
+source = "git+https://github.com/kpcyrd/embedded-savegame#e9b43b87078e22352f376d3254b6c5c7f27679cb"
 dependencies = [
  "arrayref",
  "djb2",
