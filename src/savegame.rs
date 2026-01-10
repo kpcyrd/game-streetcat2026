@@ -13,7 +13,7 @@ pub fn setup<I2C: embedded_hal::i2c::I2c>(
 }
 
 // Exact size of our savegame data
-pub const SAVE_SIZE: usize = 4;
+const SAVE_SIZE: usize = 4;
 
 pub struct Save {
     pub buf: [u8; SAVE_SIZE],
