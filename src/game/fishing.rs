@@ -40,8 +40,26 @@ pub enum Timer {
     Onboarding,
 }
 
+#[derive(PartialEq, Eq)]
+pub enum Loot {
+    Key,
+    Bones,
+    Fish,
+}
+
+impl Loot {
+    pub const fn reward(&self) -> u16 {
+        match self {
+            Loot::Key => 0,
+            Loot::Bones => 5,
+            Loot::Fish => 10,
+        }
+    }
+}
+
 pub struct Fishing {
     spawn_timer: i16,
+    caught: Option<Loot>,
 }
 
 impl Fishing {
@@ -51,6 +69,7 @@ impl Fishing {
                 Timer::Random => u16::MAX as i16,
                 Timer::Onboarding => GOOD_START_VALUE,
             },
+            caught: None,
         }
     }
 
@@ -60,17 +79,33 @@ impl Fishing {
         self.spawn_timer = cmp::min(num, MAX_WAIT_DURATION);
     }
 
+    fn add_reward<F: Flash>(&mut self, reward: u16, campaign: &mut Campaign<F>) {
+        campaign.money = campaign.money.saturating_add(reward);
+        campaign.write_savegame();
+        self.setup_spawn_timer(campaign);
+    }
+
     pub fn event<F: Flash>(&mut self, event: Event, campaign: &mut Campaign<F>) {
         match event {
             Event::Up => (),
             Event::Down => (),
             Event::A => {
-                if self.spawn_timer <= 0 {
+                // If we showed our successful catch, remove it now
+                if let Some(loot) = self.caught.take() {
+                    // Add reward, start new timer
+                    if loot == Loot::Key {
+                        campaign.unlocks.unlock_next();
+                    }
+                    self.add_reward(loot.reward(), campaign);
+                } else if self.spawn_timer <= 0 {
                     // Caught fish!
-                    // TODO: randomize money reward
-                    campaign.money = campaign.money.saturating_add(10);
-                    campaign.write_savegame();
-                    self.setup_spawn_timer(campaign);
+
+                    if campaign.escaped_corporate() {
+                        // TODO: randomize money reward
+                        self.caught = Some(Loot::Bones);
+                    } else {
+                        self.add_reward(10, campaign);
+                    }
                 }
             }
             Event::B => {
@@ -87,7 +122,9 @@ impl Fishing {
     }
 
     pub fn tick<F: Flash>(&mut self, campaign: &mut Campaign<F>) {
-        if self.spawn_timer < ESCAPE_THRESHOLD && campaign.escaped_corporate() {
+        if self.caught.is_some() {
+            // Waiting for player to acknowledge catch
+        } else if self.spawn_timer < ESCAPE_THRESHOLD && campaign.escaped_corporate() {
             // Fish escaped
             self.setup_spawn_timer(campaign);
         } else {
