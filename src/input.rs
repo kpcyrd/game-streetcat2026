@@ -68,9 +68,13 @@ impl<'d> Buttons<'d> {
     }
 
     fn probe(input: &Input<'d>, pressed: &mut Pressed, flag: Pressed) -> Option<Action> {
-        if input.is_low() && !pressed.contains(flag) {
-            pressed.insert(flag);
-            Some(Action::Pressed)
+        if input.is_low() {
+            if !pressed.contains(flag) {
+                pressed.insert(flag);
+                Some(Action::Pressed)
+            } else {
+                None
+            }
         } else {
             pressed.remove(flag);
             None
