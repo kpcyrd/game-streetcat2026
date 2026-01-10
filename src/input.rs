@@ -1,3 +1,4 @@
+use bitflags::bitflags;
 use ch32_hal::gpio::Input;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -8,26 +9,70 @@ pub enum Event {
     B,
 }
 
+impl Event {
+    const fn flag(self) -> Pressed {
+        match self {
+            Event::Up => Pressed::UP,
+            Event::Down => Pressed::DOWN,
+            Event::A => Pressed::A,
+            Event::B => Pressed::B,
+        }
+    }
+}
+
 pub enum Action {
     Pressed,
 }
 
-pub struct Button<'d> {
-    pin: Input<'d>,
-    on: bool,
+bitflags! {
+    #[derive(Clone, Copy)]
+    struct Pressed: u8 {
+        const UP = 1 << 0;
+        const DOWN = 1 << 1;
+        const A = 1 << 2;
+        const B = 1 << 3;
+    }
 }
 
-impl Button<'_> {
-    pub const fn new(pin: Input) -> Button {
-        Button { pin, on: false }
+pub struct Buttons<'d> {
+    pub up: Input<'d>,
+    pub down: Input<'d>,
+    pub a: Input<'d>,
+    pub b: Input<'d>,
+    pressed: Pressed,
+}
+
+impl<'d> Buttons<'d> {
+    pub const fn new(up: Input<'d>, down: Input<'d>, a: Input<'d>, b: Input<'d>) -> Self {
+        Self {
+            up,
+            down,
+            a,
+            b,
+            pressed: Pressed::empty(),
+        }
     }
 
-    pub fn probe(&mut self) -> Option<Action> {
-        if self.pin.is_low() && !self.on {
-            self.on = true;
+    pub fn scan(&mut self) -> Option<Event> {
+        for (pin, event) in [
+            (&self.up, Event::Up),
+            (&self.down, Event::Down),
+            (&self.a, Event::A),
+            (&self.b, Event::B),
+        ] {
+            if let Some(Action::Pressed) = Self::probe(&pin, &mut self.pressed, event.flag()) {
+                return Some(event);
+            }
+        }
+        None
+    }
+
+    fn probe(input: &Input<'d>, pressed: &mut Pressed, flag: Pressed) -> Option<Action> {
+        if input.is_low() && !pressed.contains(flag) {
+            pressed.insert(flag);
             Some(Action::Pressed)
         } else {
-            self.on = false;
+            pressed.remove(flag);
             None
         }
     }

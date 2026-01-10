@@ -7,10 +7,7 @@ mod gfx;
 mod input;
 mod savegame;
 
-use crate::{
-    game::{Game, campaign::Campaign},
-    input::{Action, Button, Event},
-};
+use crate::game::{Game, campaign::Campaign};
 use ch32_hal::{
     self as hal,
     // delay::Delay,
@@ -46,11 +43,14 @@ fn main() -> ! {
     display.init().ok();
 
     // Buttons
-    let mut btn_up = Button::new(Input::new(p.PA1, gpio::Pull::Up));
-    let mut btn_down = Button::new(Input::new(p.PA2, gpio::Pull::Up));
-    let mut btn_b = Button::new(Input::new(p.PC0, gpio::Pull::Up));
-    let mut btn_a = Button::new(Input::new(p.PC4, gpio::Pull::Up));
+    let mut btns = input::Buttons::new(
+        Input::new(p.PA1, gpio::Pull::Up),
+        Input::new(p.PA2, gpio::Pull::Up),
+        Input::new(p.PC4, gpio::Pull::Up),
+        Input::new(p.PC0, gpio::Pull::Up),
+    );
 
+    // Setup game
     let mut game = Game::start();
     let mut campaign = Campaign::new(flash);
     campaign.scan_savegames();
@@ -62,34 +62,12 @@ fn main() -> ! {
         display.flush().ok();
 
         // Inputs
-        match btn_up.probe() {
-            Some(Action::Pressed) => game.event(Event::Up, &mut campaign),
-            None => (),
+        if let Some(event) = btns.scan() {
+            game.event(event, &mut campaign);
         }
 
-        match btn_down.probe() {
-            Some(Action::Pressed) => game.event(Event::Down, &mut campaign),
-            None => (),
-        }
-
-        match btn_b.probe() {
-            Some(Action::Pressed) => game.event(Event::B, &mut campaign),
-            None => (),
-        }
-
-        match btn_a.probe() {
-            Some(Action::Pressed) => game.event(Event::A, &mut campaign),
-            None => (),
-        }
-
+        // Update game state
         game = campaign.next_scene.take().unwrap_or(game);
         game.tick(&mut campaign);
-
-        /*
-        // wait for interrupt
-        riscv::asm::wfi();
-        */
-
-        // delay.delay_ms(250);
     }
 }
