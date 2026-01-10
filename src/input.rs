@@ -60,7 +60,7 @@ impl<'d> Buttons<'d> {
             (&self.a, Event::A),
             (&self.b, Event::B),
         ] {
-            if let Some(Action::Pressed) = Self::probe(&pin, &mut self.pressed, event.flag()) {
+            if let Some(Action::Pressed) = Self::probe(pin, &mut self.pressed, event.flag()) {
                 return Some(event);
             }
         }

@@ -40,7 +40,7 @@ pub enum Timer {
     Onboarding,
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Loot {
     Key,
     Bones,
@@ -53,6 +53,14 @@ impl Loot {
             Loot::Key => 0,
             Loot::Bones => 5,
             Loot::Fish => 10,
+        }
+    }
+
+    pub const fn description(&self) -> &'static str {
+        match self {
+            Loot::Key => "Key!",
+            Loot::Bones => "+5",
+            Loot::Fish => "+10",
         }
     }
 }
@@ -139,6 +147,18 @@ impl Fishing {
         campaign: &Campaign<F>,
     ) {
         let cat_point = if campaign.escaped_corporate() {
+            if let Some(loot) = self.caught {
+                // Show caught loot
+                Text::with_baseline(
+                    loot.description(),
+                    Point::new(15, 0),
+                    MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
+                    Baseline::Top,
+                )
+                .draw(display)
+                .ok();
+            }
+
             /*
             let mut buf = itoa::Buffer::new();
             // let txt = buf.format(campaign.money);
