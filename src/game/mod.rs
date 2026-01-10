@@ -20,13 +20,32 @@ bitflags! {
         // Further instructions
         const STORY_ACKNOWLEDGED_ESCAPE = 0b1 << 2;
 
-        /*
-        const FOO = 0b1 << 0;
-        const BAR = 0b1 << 1;
-        const ABC = 0b1 << 2;
-        const DEF = 0b1 << 3;
-        const XYZ = 0b1 << 4;
-        */
+        // Upgraded rod
+        const SHOP_UPGRADED_ROD = 0b1 << 3;
+        const BOUGHT_UPGRADED_ROD = 0b1 << 4;
+
+        // Upgraded bait
+        const SHOP_UNLOCKED_BAIT = 0b1 << 5;
+        const BOUGHT_UNLOCKED_BAIT = 0b1 << 6;
+
+        // Upgraded rates
+        const SHOP_BETTER_RATES = 0b1 << 7;
+        const BOUGHT_BETTER_RATES = 0b1 << 8;
+
+        // Final objective
+        const KING_STATUS = 0b1 << 15;
+    }
+}
+
+impl Unlocks {
+    pub fn unlock_next(&mut self) {
+        if !self.contains(Unlocks::SHOP_UPGRADED_ROD) {
+            self.insert(Unlocks::SHOP_UPGRADED_ROD);
+        } else if !self.contains(Unlocks::SHOP_UNLOCKED_BAIT) {
+            self.insert(Unlocks::SHOP_UNLOCKED_BAIT);
+        } else if !self.contains(Unlocks::SHOP_BETTER_RATES) {
+            self.insert(Unlocks::SHOP_BETTER_RATES);
+        }
     }
 }
 
