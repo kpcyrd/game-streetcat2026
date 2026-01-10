@@ -64,25 +64,21 @@ fn main() -> ! {
         // Inputs
         match btn_up.probe() {
             Some(Action::Pressed) => game.event(Event::Up, &mut campaign),
-            Some(Action::Released) => (),
             None => (),
         }
 
         match btn_down.probe() {
             Some(Action::Pressed) => game.event(Event::Down, &mut campaign),
-            Some(Action::Released) => (),
             None => (),
         }
 
         match btn_b.probe() {
             Some(Action::Pressed) => game.event(Event::B, &mut campaign),
-            Some(Action::Released) => (),
             None => (),
         }
 
         match btn_a.probe() {
             Some(Action::Pressed) => game.event(Event::A, &mut campaign),
-            Some(Action::Released) => (),
             None => (),
         }
 

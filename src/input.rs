@@ -10,7 +10,6 @@ pub enum Event {
 
 pub enum Action {
     Pressed,
-    Released,
 }
 
 pub struct Button<'d> {
@@ -24,15 +23,12 @@ impl Button<'_> {
     }
 
     pub fn probe(&mut self) -> Option<Action> {
-        if self.pin.is_low() {
-            if !self.on {
-                self.on = true;
-                return Some(Action::Pressed);
-            }
-        } else if self.on {
+        if self.pin.is_low() && !self.on {
+            self.on = true;
+            Some(Action::Pressed)
+        } else {
             self.on = false;
-            return Some(Action::Released);
+            None
         }
-        None
     }
 }
