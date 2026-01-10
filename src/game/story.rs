@@ -23,7 +23,7 @@ impl Story {
     }
 
     // State machine functions
-    pub fn event<F: Flash>(&mut self, event: Event, campaign: &mut Campaign<F>) {
+    pub fn event<F: Flash>(&self, event: Event, campaign: &mut Campaign<F>) {
         match event {
             Event::Up => (),
             Event::Down => (),

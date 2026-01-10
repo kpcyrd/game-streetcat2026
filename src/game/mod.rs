@@ -1,5 +1,6 @@
 pub mod campaign;
 pub mod fishing;
+pub mod plot;
 pub mod shop;
 pub mod start;
 pub mod story;
@@ -33,7 +34,7 @@ pub enum Game {
     Start(start::Start),
     Fishing(fishing::Fishing),
     Shop(shop::Shop),
-    Story(story::Story),
+    Story(&'static story::Story),
 }
 
 impl Game {

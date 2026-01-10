@@ -1,5 +1,5 @@
 use crate::{
-    game::{Game, Unlocks, fishing, story::Story},
+    game::{Game, Unlocks, plot},
     savegame::{SLOT_COUNT, SLOT_SIZE, Save},
 };
 use embedded_savegame::storage::{Flash, Storage};
@@ -58,25 +58,7 @@ impl<F: Flash> Campaign<F> {
 
     pub fn init_next(&mut self) {
         self.write_savegame();
-        self.next_scene = Some(self.scene());
-    }
-
-    const fn scene(&self) -> Game {
-        if !self.unlocks.contains(Unlocks::STORY_INTRO) {
-            Game::Story(Story::new(
-                "You wake up in your\ncorporate job.\n\nYour job is to\ndelete emails.",
-                Unlocks::STORY_INTRO,
-            ))
-        } else if self.escaped_corporate()
-            && !self.unlocks.contains(Unlocks::STORY_ACKNOWLEDGED_ESCAPE)
-        {
-            Game::Story(Story::new(
-                "You are free!\n\nNow what?",
-                Unlocks::STORY_ACKNOWLEDGED_ESCAPE,
-            ))
-        } else {
-            Game::fishing(fishing::Timer::Onboarding)
-        }
+        self.next_scene = Some(plot::get(self));
     }
 
     pub const fn escaped_corporate(&self) -> bool {
