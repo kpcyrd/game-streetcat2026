@@ -2,6 +2,7 @@ use crate::{
     game::{Game, Unlocks, campaign::Campaign},
     gfx,
     input::Event,
+    text::Text,
 };
 use core::cmp;
 use embedded_graphics::{
@@ -10,7 +11,7 @@ use embedded_graphics::{
     mono_font::MonoTextStyle,
     pixelcolor::BinaryColor,
     prelude::{DrawTarget, Point},
-    text::{Baseline, Text},
+    text::Baseline,
 };
 use embedded_savegame::storage::Flash;
 

@@ -6,6 +6,7 @@ mod game;
 mod gfx;
 mod input;
 mod savegame;
+mod text;
 
 use crate::game::{Game, campaign::Campaign};
 use ch32_hal::{

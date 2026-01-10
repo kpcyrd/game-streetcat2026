@@ -2,13 +2,14 @@ use crate::{
     game::{Unlocks, campaign::Campaign},
     gfx,
     input::Event,
+    text::Text,
 };
 use embedded_graphics::{
     Drawable,
     mono_font::MonoTextStyle,
     pixelcolor::BinaryColor,
     prelude::{DrawTarget, Point},
-    text::{Baseline, Text},
+    text::Baseline,
 };
 use embedded_savegame::storage::Flash;
 

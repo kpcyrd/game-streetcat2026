@@ -2,6 +2,7 @@ use crate::{
     game::{Game, campaign::Campaign, fishing},
     gfx,
     input::Event,
+    text::Text,
 };
 use embedded_graphics::{
     Drawable,
@@ -9,7 +10,7 @@ use embedded_graphics::{
     mono_font::MonoTextStyle,
     pixelcolor::BinaryColor,
     prelude::{DrawTarget, Point},
-    text::{Baseline, Text},
+    text::Baseline,
 };
 use embedded_savegame::storage::Flash;
 
