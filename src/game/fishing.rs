@@ -34,6 +34,9 @@ const OFFICE_CAT_OFFSET: Point = Point::new(0, 10);
 // The necktie position relative to the office cat
 const NECKTIE_OFFSET: Point = Point::new(17, CAT_HEIGHT + 1);
 
+// The position to render your current balance
+const MONEY_POSITION: Point = Point::new(64, 0);
+
 pub enum Timer {
     Random,
     Onboarding,
@@ -153,13 +156,11 @@ impl Fishing {
                     .ok();
             }
 
-            /*
+            // Money
+            Text::new("$", MONEY_POSITION).draw(display).ok();
             let mut buf = itoa::Buffer::new();
-            // let txt = buf.format(campaign.money);
-            let txt = buf.format(self.spawn_timer);
-            */
-            let txt = "TODO";
-            Text::new(txt, Point::new(64, 0)).draw(display).ok();
+            let txt = buf.format(campaign.money);
+            Text::new(txt, MONEY_POSITION + Point::new(gfx::FONT_WIDTH, 0)).draw(display).ok();
 
             // Fishing rod
             let mut point = Point::new(64, 16);

@@ -11,8 +11,8 @@ use embedded_graphics::{
 };
 use embedded_savegame::storage::Flash;
 
-const CURSOR_LEFT_PAD: i32 = (gfx::FONT.character_size.width as i32) * 2;
-const ITEM_LEFT_PAD: i32 = CURSOR_LEFT_PAD + (gfx::FONT.character_size.width as i32) * 2;
+const CURSOR_LEFT_PAD: i32 = gfx::FONT_WIDTH * 2;
+const ITEM_LEFT_PAD: i32 = CURSOR_LEFT_PAD + gfx::FONT_WIDTH * 2;
 const ITEM_1: Point = Point::new(ITEM_LEFT_PAD, FONT_HEIGHT);
 const ITEM_2: Point = Point::new(ITEM_LEFT_PAD, FONT_HEIGHT * 2);
 

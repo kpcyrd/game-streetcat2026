@@ -11,3 +11,4 @@ pub const NECKTIE: ImageRaw<BinaryColor> = ImageRaw::new(include_bytes!("../vide
 
 pub const FONT: MonoFont = FONT_6X10;
 pub const FONT_HEIGHT: i32 = FONT.character_size.height as i32;
+pub const FONT_WIDTH: i32 = FONT.character_size.width as i32;
