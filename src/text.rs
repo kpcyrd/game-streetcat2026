@@ -7,25 +7,20 @@ use embedded_graphics::{
     text::{Baseline, renderer::TextRenderer},
 };
 
-pub struct Text(embedded_graphics::text::Text<'static, MonoTextStyle<'static, BinaryColor>>);
+pub struct Text<'a> {
+    /// The string.
+    pub text: &'a str,
+    /// The position.
+    pub position: Point,
+}
 
-impl Text {
-    pub const fn with_baseline(
-        text: &'static str,
-        position: Point,
-        _style: MonoTextStyle<'static, BinaryColor>,
-        _baseline: Baseline,
-    ) -> Self {
-        let style = MonoTextStyle::new(&gfx::FONT, BinaryColor::On);
-        let baseline = Baseline::Top;
-
-        Text(embedded_graphics::text::Text::with_baseline(
-            text, position, style, baseline,
-        ))
+impl<'a> Text<'a> {
+    pub const fn new(text: &'a str, position: Point) -> Self {
+        Text { text, position }
     }
 }
 
-impl Drawable for Text {
+impl Drawable for Text<'_> {
     type Color = BinaryColor;
     type Output = ();
 
@@ -33,9 +28,8 @@ impl Drawable for Text {
         &self,
         display: &mut D,
     ) -> Result<Self::Output, D::Error> {
-        self.0
-            .character_style
-            .draw_string(self.0.text, self.0.position, Baseline::Top, display)?;
+        let style = MonoTextStyle::new(&gfx::FONT, BinaryColor::On);
+        style.draw_string(self.text, self.position, Baseline::Top, display)?;
         Ok(())
     }
 }

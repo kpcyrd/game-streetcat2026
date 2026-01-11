@@ -8,10 +8,8 @@ use core::cmp;
 use embedded_graphics::{
     Drawable,
     image::Image,
-    mono_font::MonoTextStyle,
     pixelcolor::BinaryColor,
     prelude::{DrawTarget, Point},
-    text::Baseline,
 };
 use embedded_savegame::storage::Flash;
 
@@ -150,14 +148,9 @@ impl Fishing {
         let cat_point = if campaign.escaped_corporate() {
             if let Some(loot) = self.caught {
                 // Show caught loot
-                Text::with_baseline(
-                    loot.description(),
-                    Point::new(15, 0),
-                    MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
-                    Baseline::Top,
-                )
-                .draw(display)
-                .ok();
+                Text::new(loot.description(), Point::new(15, 0))
+                    .draw(display)
+                    .ok();
             }
 
             /*
@@ -166,14 +159,9 @@ impl Fishing {
             let txt = buf.format(self.spawn_timer);
             */
             let txt = "TODO";
-            Text::with_baseline(
-                txt,
-                Point::new(64, 0),
-                MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
-                Baseline::Top,
-            )
-            .draw(display)
-            .ok();
+            Text::new(txt, Point::new(64, 0))
+                .draw(display)
+                .ok();
 
             // Fishing rod
             let mut point = Point::new(64, 16);
@@ -187,35 +175,20 @@ impl Fishing {
         } else {
             // Email
             if self.spawn_timer <= 0 {
-                Text::with_baseline(
-                    "New Email!",
-                    Point::new(60, 8),
-                    MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
-                    Baseline::Top,
-                )
-                .draw(display)
-                .ok();
+                Text::new("New Email!", Point::new(60, 8))
+                    .draw(display)
+                    .ok();
             }
 
             if campaign.can_escape_corporate() {
-                Text::with_baseline(
-                    "B: Escape",
-                    Point::new(2, 64 - gfx::FONT_HEIGHT),
-                    MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
-                    Baseline::Top,
-                )
-                .draw(display)
-                .ok();
+                Text::new("B: Escape", Point::new(2, 64 - gfx::FONT_HEIGHT))
+                    .draw(display)
+                    .ok();
             }
 
-            Text::with_baseline(
-                "| A: Delete",
-                Point::new(62, 64 - gfx::FONT_HEIGHT),
-                MonoTextStyle::new(&gfx::FONT, BinaryColor::On),
-                Baseline::Top,
-            )
-            .draw(display)
-            .ok();
+            Text::new("| A: Delete", Point::new(62, 64 - gfx::FONT_HEIGHT))
+                .draw(display)
+                .ok();
 
             // The cat position (slightly higher)
             let cat_position = STANDARD_CAT_POSITION - OFFICE_CAT_OFFSET;
