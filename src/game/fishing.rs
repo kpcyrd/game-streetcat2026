@@ -159,9 +159,7 @@ impl Fishing {
             let txt = buf.format(self.spawn_timer);
             */
             let txt = "TODO";
-            Text::new(txt, Point::new(64, 0))
-                .draw(display)
-                .ok();
+            Text::new(txt, Point::new(64, 0)).draw(display).ok();
 
             // Fishing rod
             let mut point = Point::new(64, 16);

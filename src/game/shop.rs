@@ -31,9 +31,7 @@ impl Shop {
     }
 
     pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D) {
-        Text::new("shop!", Point::new(64, 0))
-            .draw(display)
-            .ok();
+        Text::new("shop!", Point::new(64, 0)).draw(display).ok();
 
         Image::new(&gfx::CAT, Point::new(4, 16)).draw(display).ok();
     }

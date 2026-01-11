@@ -2,12 +2,18 @@ use crate::game::{Game, Unlocks, campaign::Campaign, fishing, story::Story};
 use embedded_savegame::storage::Flash;
 
 const STORY_INTRO: Story = Story::new(
-    "You wake up in your\ncorporate job.\n\nYour job is to\ndelete emails.",
+    &[
+        "You wake up in your",
+        "corporate job.",
+        "",
+        "Your job is to",
+        "delete emails.",
+    ],
     Unlocks::STORY_INTRO,
 );
 
 const STORY_ACKNOWLEDGED_ESCAPE: Story = Story::new(
-    "You are free!\n\nNow what?",
+    &["You are free!", "", "Now what?"],
     Unlocks::STORY_ACKNOWLEDGED_ESCAPE,
 );
 
