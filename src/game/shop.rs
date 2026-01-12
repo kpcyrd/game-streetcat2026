@@ -6,7 +6,6 @@ use crate::{
 };
 use embedded_graphics::{
     Drawable,
-    // image::Image,
     pixelcolor::BinaryColor,
     prelude::{DrawTarget, Point},
 };
@@ -94,7 +93,14 @@ impl Shop {
         match event {
             Event::Up => self.idx = self.idx.checked_sub(1).unwrap_or(MENU_LIMIT - 1),
             Event::Down => self.idx = (self.idx + 1) % MENU_LIMIT,
-            Event::A => (),
+            Event::A => {
+                if let Some((item, price)) = ShopItem::item(self.idx, campaign.unlocks)
+                    && let Some(new_balance) = campaign.money.checked_sub(price)
+                {
+                    campaign.money = new_balance;
+                    campaign.unlocks.insert(item.unlocks());
+                }
+            }
             Event::B => {
                 campaign.next_scene = Some(Game::fishing(fishing::Timer::Random));
             }
@@ -158,7 +164,5 @@ impl Shop {
         Text::new("| A: Buy", Point::new(62, 64 - gfx::FONT_HEIGHT))
             .draw(display)
             .ok();
-
-        // Image::new(&gfx::CAT, Point::new(4, 16)).draw(display).ok();
     }
 }

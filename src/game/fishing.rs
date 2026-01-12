@@ -112,7 +112,7 @@ impl Fishing {
 
                     if campaign.escaped_corporate() {
                         // TODO: randomize money reward
-                        self.caught = Some(Loot::Key);
+                        self.caught = Some(Loot::Fish);
                     } else {
                         self.add_reward(10, campaign);
                     }
