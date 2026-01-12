@@ -137,6 +137,7 @@ impl Shop {
         campaign: &Campaign<F>,
     ) {
         Text::new("Shop!", Point::new(0, 0)).draw(display).ok();
+        gfx::render_balance(display, campaign.money);
 
         let mut point = Point::new(0, gfx::FONT_HEIGHT * 2);
         for n in 0..MENU_LIMIT {
