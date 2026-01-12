@@ -14,6 +14,7 @@ use embedded_savegame::storage::Flash;
 
 const MENU_LIMIT: usize = 3;
 const CURSOR_LEFT_PAD: i32 = gfx::FONT_WIDTH * 2;
+const ITEM_LEFT_PAD: i32 = CURSOR_LEFT_PAD + gfx::FONT_WIDTH * 5;
 
 const SHOP_MENU: &[&[ShopItem]] = &[
     &[ShopItem::UpgradedRod],
@@ -39,9 +40,9 @@ impl ShopItem {
 
     pub const fn text(&self) -> &'static str {
         match self {
-            ShopItem::UpgradedRod => "Upgraded Rod - $100",
-            ShopItem::Bait => "Bait - $50",
-            ShopItem::BetterRates => "Better Rates - $200",
+            ShopItem::UpgradedRod => "Upgraded Rod",
+            ShopItem::Bait => "Bait",
+            ShopItem::BetterRates => "Better Rates",
         }
     }
 
@@ -100,6 +101,30 @@ impl Shop {
         }
     }
 
+    pub fn render_price<D: DrawTarget<Color = BinaryColor>>(
+        &self,
+        display: &mut D,
+        mut point: Point,
+        price: u16,
+    ) {
+        if price == 0 {
+            return;
+        }
+
+        point.x += CURSOR_LEFT_PAD;
+        gfx::render_currency(display, point);
+
+        if price < 100 {
+            point.x += gfx::FONT_WIDTH * 2;
+        } else {
+            point.x += gfx::FONT_WIDTH;
+        }
+
+        let mut buf = itoa::Buffer::new();
+        let price = buf.format(price);
+        Text::new(price, point).draw(display).ok();
+    }
+
     pub fn render<D: DrawTarget<Color = BinaryColor>, F: Flash>(
         &self,
         display: &mut D,
@@ -115,7 +140,9 @@ impl Shop {
 
             let item = ShopItem::item(n, campaign.unlocks);
             if let Some((item, price)) = item {
-                Text::new(item.text(), point + Point::new(CURSOR_LEFT_PAD, 0))
+                self.render_price(display, point, price);
+
+                Text::new(item.text(), point + Point::new(ITEM_LEFT_PAD, 0))
                     .draw(display)
                     .ok();
             } else {

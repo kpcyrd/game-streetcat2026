@@ -157,7 +157,8 @@ impl Fishing {
             }
 
             // Money
-            Text::new("$", MONEY_POSITION).draw(display).ok();
+            gfx::render_currency(display, MONEY_POSITION);
+
             let mut buf = itoa::Buffer::new();
             let txt = buf.format(campaign.money);
             Text::new(txt, MONEY_POSITION + Point::new(gfx::FONT_WIDTH, 0))
