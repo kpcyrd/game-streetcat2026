@@ -7,6 +7,9 @@ use embedded_graphics::{
     text::{Baseline, renderer::TextRenderer},
 };
 
+// Create style once as a const
+const STYLE: MonoTextStyle<'static, BinaryColor> = MonoTextStyle::new(&gfx::FONT, BinaryColor::On);
+
 pub struct Text<'a> {
     /// The string.
     pub text: &'a str,
@@ -28,8 +31,7 @@ impl Drawable for Text<'_> {
         &self,
         display: &mut D,
     ) -> Result<Self::Output, D::Error> {
-        let style = MonoTextStyle::new(&gfx::FONT, BinaryColor::On);
-        style.draw_string(self.text, self.position, Baseline::Top, display)?;
+        STYLE.draw_string(self.text, self.position, Baseline::Top, display)?;
         Ok(())
     }
 }
