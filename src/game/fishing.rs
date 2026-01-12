@@ -109,7 +109,10 @@ impl Fishing {
                     // Caught fish!
 
                     if campaign.escaped_corporate() {
-                        campaign.next_key = campaign.next_key.saturating_sub(1);
+                        // If an upgrade could be unlocked, decrement the timer
+                        if campaign.unlocks.next_unlock().is_some() {
+                            campaign.next_key = campaign.next_key.saturating_sub(1);
+                        }
 
                         // Randomize money reward
                         self.caught = Some(if campaign.next_key == 0 {

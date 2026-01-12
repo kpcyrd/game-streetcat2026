@@ -38,13 +38,21 @@ bitflags! {
 }
 
 impl Unlocks {
-    pub fn unlock_next(&mut self) {
+    pub const fn next_unlock(&self) -> Option<Unlocks> {
         if !self.contains(Unlocks::SHOP_UPGRADED_ROD) {
-            self.insert(Unlocks::SHOP_UPGRADED_ROD);
+            Some(Unlocks::SHOP_UPGRADED_ROD)
         } else if !self.contains(Unlocks::SHOP_UNLOCKED_BAIT) {
-            self.insert(Unlocks::SHOP_UNLOCKED_BAIT);
+            Some(Unlocks::SHOP_UNLOCKED_BAIT)
         } else if !self.contains(Unlocks::SHOP_BETTER_RATES) {
-            self.insert(Unlocks::SHOP_BETTER_RATES);
+            Some(Unlocks::SHOP_BETTER_RATES)
+        } else {
+            None
+        }
+    }
+
+    pub fn unlock_next(&mut self) {
+        if let Some(unlock) = self.next_unlock() {
+            self.insert(unlock);
         }
     }
 }
