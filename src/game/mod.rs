@@ -96,7 +96,7 @@ impl Game {
         match self {
             Game::Start(s) => s.render(display),
             Game::Fishing(f) => f.render(display, campaign),
-            Game::Shop(s) => s.render(display),
+            Game::Shop(s) => s.render(display, campaign),
             Game::Story(s) => s.render(display),
         }
     }
