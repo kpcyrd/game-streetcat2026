@@ -160,7 +160,9 @@ impl Fishing {
             Text::new("$", MONEY_POSITION).draw(display).ok();
             let mut buf = itoa::Buffer::new();
             let txt = buf.format(campaign.money);
-            Text::new(txt, MONEY_POSITION + Point::new(gfx::FONT_WIDTH, 0)).draw(display).ok();
+            Text::new(txt, MONEY_POSITION + Point::new(gfx::FONT_WIDTH, 0))
+                .draw(display)
+                .ok();
 
             // Fishing rod
             let mut point = Point::new(64, 16);
