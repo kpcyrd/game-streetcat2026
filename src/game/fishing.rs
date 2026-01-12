@@ -102,14 +102,23 @@ impl Fishing {
                     // Add reward, start new timer
                     if loot == Loot::Key {
                         campaign.unlocks.unlock_next();
+                        campaign.setup_next_key();
                     }
                     self.add_reward(loot.reward(), campaign);
                 } else if self.spawn_timer <= 0 {
                     // Caught fish!
 
                     if campaign.escaped_corporate() {
-                        // TODO: randomize money reward
-                        self.caught = Some(Loot::Fish);
+                        campaign.next_key = campaign.next_key.saturating_sub(1);
+
+                        // Randomize money reward
+                        self.caught = Some(if campaign.next_key == 0 {
+                            Loot::Key
+                        } else if campaign.next_key % 2 == 0 {
+                            Loot::Bones
+                        } else {
+                            Loot::Fish
+                        });
                     } else {
                         self.add_reward(10, campaign);
                     }
