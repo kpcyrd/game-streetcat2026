@@ -11,10 +11,13 @@ use embedded_graphics::{
 };
 use embedded_savegame::storage::Flash;
 
-const CURSOR_LEFT_PAD: i32 = gfx::FONT_WIDTH * 2;
+const CURSOR_LEFT_PAD: i32 = gfx::FONT_WIDTH * 5;
 const ITEM_LEFT_PAD: i32 = CURSOR_LEFT_PAD + gfx::FONT_WIDTH * 2;
-const ITEM_1: Point = Point::new(ITEM_LEFT_PAD, FONT_HEIGHT);
-const ITEM_2: Point = Point::new(ITEM_LEFT_PAD, FONT_HEIGHT * 2);
+const ITEM_1: Point = Point::new(ITEM_LEFT_PAD, FONT_HEIGHT * 2);
+const ITEM_2: Point = Point::new(ITEM_LEFT_PAD, FONT_HEIGHT * 3);
+
+const TITLE: &str = "Title (2026)";
+const TITLE_POINT: Point = Point::new((128 - (TITLE.len() as i32 * gfx::FONT_WIDTH)) / 2, 0);
 
 pub struct Start {
     new_game: bool,
@@ -45,6 +48,8 @@ impl Start {
     }
 
     pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D) {
+        Text::new(TITLE, TITLE_POINT).draw(display).ok();
+
         // Continue
         Text::new("Continue", ITEM_1).draw(display).ok();
 
