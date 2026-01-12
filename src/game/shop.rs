@@ -99,6 +99,7 @@ impl Shop {
                 {
                     campaign.money = new_balance;
                     campaign.unlocks.insert(item.unlocks());
+                    campaign.write_savegame();
                 }
             }
             Event::B => {
