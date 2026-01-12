@@ -60,7 +60,7 @@ impl Start {
         Text::new(">", point).draw(display).ok();
 
         // Help
-        Text::new("B: Cancel | A: Select", Point::new(2, 64 - FONT_HEIGHT))
+        Text::new("B: -      | A: Select", Point::new(2, 64 - FONT_HEIGHT))
             .draw(display)
             .ok();
     }
