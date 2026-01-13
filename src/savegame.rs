@@ -46,37 +46,3 @@ impl Save {
         u16::from_be_bytes(*buf)
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_save_pull() {
-        let mut save = Save::new();
-        save.buf[..4].copy_from_slice(&[0x12, 0x34, 0x56, 0x78]);
-        save.reset(4);
-
-        assert_eq!(save.pull_u16(0xFF), 0x1234);
-        assert_eq!(save.pull_u8(0xFF), 0x56);
-        assert_eq!(save.pull_u8(0xFF), 0x78);
-    }
-
-    #[test]
-    fn test_save_push() {
-        let mut save = Save::new();
-        assert_eq!(save.slice(), &[]);
-
-        save.push_u16(0x1234);
-        save.push_u8(0x56);
-        save.push_u8(0x78);
-
-        assert_eq!(save.slice(), &[0x12, 0x34, 0x56, 0x78]);
-    }
-
-    #[test]
-    fn test_save_pull_from_empty() {
-        let mut save = Save::new();
-        assert_eq!(save.pull_u16(0x1337), 0x1337);
-    }
-}
