@@ -175,6 +175,11 @@ impl Fishing {
             }
             Image::new(&gfx::FISHING, point).draw(display).ok();
 
+            // Hint that there's a shop
+            if campaign.unlocks.contains(Unlocks::first_shop_unlock()) {
+                Text::new("B: Shop", gfx::LAST_LINE_B).draw(display).ok();
+            }
+
             // The cat position
             STANDARD_CAT_POSITION
         } else {
@@ -186,12 +191,10 @@ impl Fishing {
             }
 
             if campaign.can_escape_corporate() {
-                Text::new("B: Escape", Point::new(2, 64 - gfx::FONT_HEIGHT))
-                    .draw(display)
-                    .ok();
+                Text::new("B: Escape", gfx::LAST_LINE_B).draw(display).ok();
             }
 
-            Text::new("| A: Delete", Point::new(62, 64 - gfx::FONT_HEIGHT))
+            Text::new("| A: Delete", gfx::LAST_LINE_A)
                 .draw(display)
                 .ok();
 

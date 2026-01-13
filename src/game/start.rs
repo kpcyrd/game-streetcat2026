@@ -65,7 +65,7 @@ impl Start {
         Text::new(">", point).draw(display).ok();
 
         // Help
-        Text::new("B: -      | A: Select", Point::new(2, 64 - FONT_HEIGHT))
+        Text::new("| A: Select", gfx::LAST_LINE_A)
             .draw(display)
             .ok();
     }

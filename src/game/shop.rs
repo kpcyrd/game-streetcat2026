@@ -163,8 +163,6 @@ impl Shop {
         }
 
         // Help
-        Text::new("| A: Buy", Point::new(62, 64 - gfx::FONT_HEIGHT))
-            .draw(display)
-            .ok();
+        Text::new("| A: Buy", gfx::LAST_LINE_A).draw(display).ok();
     }
 }

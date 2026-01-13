@@ -38,6 +38,11 @@ bitflags! {
 }
 
 impl Unlocks {
+    /// The first unlocked shop item
+    pub const fn first_shop_unlock() -> Unlocks {
+        Unlocks::SHOP_UPGRADED_ROD
+    }
+
     pub const fn next_unlock(&self) -> Option<Unlocks> {
         if !self.contains(Unlocks::SHOP_UPGRADED_ROD) {
             Some(Unlocks::SHOP_UPGRADED_ROD)
