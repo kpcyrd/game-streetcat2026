@@ -15,11 +15,32 @@ const MENU_LIMIT: usize = 3;
 const CURSOR_LEFT_PAD: i32 = gfx::FONT_WIDTH * 2;
 const ITEM_LEFT_PAD: i32 = CURSOR_LEFT_PAD + gfx::FONT_WIDTH * 6;
 
+const MAX_ITEM_NAME: usize = 12;
+
 const SHOP_MENU: &[&[ShopItem]] = &[
     &[ShopItem::UpgradedRod],
     &[ShopItem::Bait],
     &[ShopItem::BetterRates],
 ];
+
+// Sanity checks
+const _: () = const {
+    // Ensure this number matches
+    assert!(SHOP_MENU.len() == MENU_LIMIT);
+
+    // Ensure all item names fit (for loops are not const yet)
+    let mut a = 0;
+    while a < SHOP_MENU.len() {
+        let items = SHOP_MENU[a];
+        let mut b = 0;
+        while b < items.len() {
+            let item = items[b];
+            assert!(item.text().len() <= MAX_ITEM_NAME);
+            b += 1;
+        }
+        a += 1;
+    }
+};
 
 #[derive(Debug, Clone, Copy)]
 pub enum ShopItem {
