@@ -92,22 +92,26 @@ impl Fishing {
         self.setup_spawn_timer(campaign);
     }
 
+    fn collect_loot<F: Flash>(&mut self, campaign: &mut Campaign<F>) {
+        if let Some(loot) = self.caught.take() {
+            if loot == Loot::Key {
+                campaign.unlocks.unlock_next();
+                campaign.setup_next_unlock_key();
+            }
+            self.add_reward(loot.reward(), campaign);
+        }
+    }
+
     pub fn event<F: Flash>(&mut self, event: Event, campaign: &mut Campaign<F>) {
         match event {
             Event::Up => (),
             Event::Down => (),
             Event::A => {
-                // If we showed our successful catch, remove it now
-                if let Some(loot) = self.caught.take() {
-                    // Add reward, start new timer
-                    if loot == Loot::Key {
-                        campaign.unlocks.unlock_next();
-                        campaign.setup_next_unlock_key();
-                    }
-                    self.add_reward(loot.reward(), campaign);
+                if self.caught.is_some() {
+                    // If we showed our successful catch, remove it now
+                    self.collect_loot(campaign);
                 } else if self.spawn_timer <= 0 {
                     // Caught fish!
-
                     if campaign.escaped_corporate() {
                         // If an upgrade could be unlocked, decrement the timer
                         if campaign.unlocks.next_unlock().is_some() {
@@ -129,6 +133,9 @@ impl Fishing {
             }
             Event::B => {
                 if campaign.escaped_corporate() {
+                    // Collect any loot, just in case
+                    self.collect_loot(campaign);
+
                     campaign.next_scene = Some(Game::shop());
                 } else if campaign.can_escape_corporate() {
                     // Escape corporate
