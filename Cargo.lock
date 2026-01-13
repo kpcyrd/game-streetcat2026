@@ -59,7 +59,7 @@ checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
 [[package]]
 name = "ch32-hal"
 version = "0.1.0"
-source = "git+https://github.com/ch32-rs/ch32-hal.git#2d3875bb90f96e253f5086ef92555fd2a20e4ede"
+source = "git+https://github.com/ch32-rs/ch32-hal.git#83b7e6f76d810da430ad7a681495b7ef56c6dfdf"
 dependencies = [
  "bitmaps",
  "ch32-metapac",
@@ -86,9 +86,9 @@ dependencies = [
 [[package]]
 name = "ch32-metapac"
 version = "0.1.0"
-source = "git+https://github.com/ch32-rs/ch32-metapac?rev=b1cbc7a98e43af3fd3170821654784e2c01cb26b#b1cbc7a98e43af3fd3170821654784e2c01cb26b"
+source = "git+https://github.com/ch32-rs/ch32-metapac?rev=7cd6fb70d07de3a987c63d0d8f5547bb8261e403#7cd6fb70d07de3a987c63d0d8f5547bb8261e403"
 dependencies = [
- "riscv 0.11.1",
+ "riscv 0.12.1",
  "vcell",
 ]
 
@@ -275,8 +275,9 @@ dependencies = [
 
 [[package]]
 name = "embedded-savegame"
-version = "0.2.0"
-source = "git+https://github.com/kpcyrd/embedded-savegame#2cb32c835c372375fe28d8bb6e00cb4194572ed4"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "23884450e54db7f4063f0bcac563c45e36454f7ad9f379e9a269c5c4d74c980f"
 dependencies = [
  "arrayref",
  "djb2",
@@ -584,12 +585,15 @@ checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
 
 [[package]]
 name = "riscv"
-version = "0.11.1"
+version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2f5c1b8bf41ea746266cdee443d1d1e9125c86ce1447e1a2615abd34330d33a9"
+checksum = "5ea8ff73d3720bdd0a97925f0bf79ad2744b6da8ff36be3840c48ac81191d7a7"
 dependencies = [
  "critical-section",
  "embedded-hal 1.0.0",
+ "paste",
+ "riscv-macros 0.1.0",
+ "riscv-pac",
 ]
 
 [[package]]
@@ -601,8 +605,19 @@ dependencies = [
  "critical-section",
  "embedded-hal 1.0.0",
  "paste",
- "riscv-macros",
+ "riscv-macros 0.3.0",
  "riscv-pac",
+]
+
+[[package]]
+name = "riscv-macros"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f265be5d634272320a7de94cea15c22a3bfdd4eb42eb43edc528415f066a1f25"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.114",
 ]
 
 [[package]]
