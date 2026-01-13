@@ -102,7 +102,7 @@ impl Fishing {
                     // Add reward, start new timer
                     if loot == Loot::Key {
                         campaign.unlocks.unlock_next();
-                        campaign.setup_next_key();
+                        campaign.setup_next_unlock_key();
                     }
                     self.add_reward(loot.reward(), campaign);
                 } else if self.spawn_timer <= 0 {
@@ -111,13 +111,13 @@ impl Fishing {
                     if campaign.escaped_corporate() {
                         // If an upgrade could be unlocked, decrement the timer
                         if campaign.unlocks.next_unlock().is_some() {
-                            campaign.next_key = campaign.next_key.saturating_sub(1);
+                            campaign.next_unlock_key = campaign.next_unlock_key.saturating_sub(1);
                         }
 
                         // Randomize money reward
-                        self.caught = Some(if campaign.next_key == 0 {
+                        self.caught = Some(if campaign.next_unlock_key == 0 {
                             Loot::Key
-                        } else if campaign.next_key % 2 == 0 {
+                        } else if campaign.next_unlock_key % 2 == 0 {
                             Loot::Bones
                         } else {
                             Loot::Fish

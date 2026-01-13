@@ -7,8 +7,8 @@ use embedded_savegame::storage::{Flash, Storage};
 const CORPORATE_ESCAPE_THRESHOLD: u16 = 50;
 
 // Mask is applied to RNG, then MIN is added
-const NEXT_KEY_MIN: u8 = 10;
-const NEXT_KEY_MASK: u8 = 0b1111;
+const NEXT_KEY_MIN: u8 = 4;
+const NEXT_KEY_MASK: u8 = 0b111;
 
 pub struct Campaign<F: Flash> {
     pub flash: Storage<F, SLOT_SIZE, SLOT_COUNT>,
@@ -16,7 +16,7 @@ pub struct Campaign<F: Flash> {
     pub money: u16,
     pub unlocks: Unlocks,
     pub rng: u32,
-    pub next_key: u8,
+    pub next_unlock_key: u8,
     pub next_scene: Option<Game>,
 }
 
@@ -28,7 +28,7 @@ impl<F: Flash> Campaign<F> {
             money: 0,
             unlocks: Unlocks::empty(),
             rng: djb2::hash(&[]),
-            next_key: 0,
+            next_unlock_key: 0,
             next_scene: None,
         }
     }
@@ -64,7 +64,7 @@ impl<F: Flash> Campaign<F> {
 
     pub fn init_next(&mut self) {
         self.write_savegame();
-        self.setup_next_key();
+        self.setup_next_unlock_key();
         self.next_scene = Some(plot::get(self));
     }
 
@@ -76,8 +76,8 @@ impl<F: Flash> Campaign<F> {
         self.money >= CORPORATE_ESCAPE_THRESHOLD
     }
 
-    pub fn setup_next_key(&mut self) {
+    pub fn setup_next_unlock_key(&mut self) {
         let num = self.rng as u8;
-        self.next_key = (num & NEXT_KEY_MASK) + NEXT_KEY_MIN;
+        self.next_unlock_key = (num & NEXT_KEY_MASK) + NEXT_KEY_MIN;
     }
 }
