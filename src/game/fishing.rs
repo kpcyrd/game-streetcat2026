@@ -44,6 +44,7 @@ pub enum Loot {
     Key,
     Bones,
     Fish,
+    BestFish,
 }
 
 impl Loot {
@@ -52,6 +53,7 @@ impl Loot {
             Loot::Key => 0,
             Loot::Bones => 5,
             Loot::Fish => 10,
+            Loot::BestFish => 250,
         }
     }
 
@@ -60,6 +62,7 @@ impl Loot {
             Loot::Key => "Key!",
             Loot::Bones => "+5",
             Loot::Fish => "+10",
+            Loot::BestFish => "+250",
         }
     }
 }
@@ -102,6 +105,25 @@ impl Fishing {
         }
     }
 
+    fn determine_catch<F: Flash>(&mut self, campaign: &mut Campaign<F>) -> Loot {
+        if campaign.next_unlock_key == 0 {
+            Loot::Key
+        } else if !campaign.unlocks.contains(Unlocks::BOUGHT_UNLOCKED_BAIT) {
+            Loot::Bones
+        } else {
+            let num = (campaign.rng & RNG_MASK) as u16;
+
+            if num < 15 {
+                Loot::Bones
+            } else if num < 252 {
+                Loot::Fish
+            } else {
+                // This should only be possible with the best tools/bait
+                Loot::BestFish
+            }
+        }
+    }
+
     pub fn event<F: Flash>(&mut self, event: Event, campaign: &mut Campaign<F>) {
         match event {
             Event::Up => (),
@@ -119,13 +141,7 @@ impl Fishing {
                         }
 
                         // Randomize money reward
-                        self.caught = Some(if campaign.next_unlock_key == 0 {
-                            Loot::Key
-                        } else if campaign.next_unlock_key % 2 == 0 {
-                            Loot::Bones
-                        } else {
-                            Loot::Fish
-                        });
+                        self.caught = Some(self.determine_catch(campaign));
                     } else {
                         self.add_reward(10, campaign);
                     }
