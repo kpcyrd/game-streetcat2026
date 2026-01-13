@@ -13,7 +13,7 @@ use embedded_savegame::storage::Flash;
 
 const MENU_LIMIT: usize = 3;
 const CURSOR_LEFT_PAD: i32 = gfx::FONT_WIDTH * 2;
-const ITEM_LEFT_PAD: i32 = CURSOR_LEFT_PAD + gfx::FONT_WIDTH * 5;
+const ITEM_LEFT_PAD: i32 = CURSOR_LEFT_PAD + gfx::FONT_WIDTH * 6;
 
 const SHOP_MENU: &[&[ShopItem]] = &[
     &[ShopItem::UpgradedRod],
@@ -119,13 +119,19 @@ impl Shop {
         }
 
         point.x += CURSOR_LEFT_PAD;
-        gfx::render_currency(display, point);
 
-        if price < 100 {
+        // Padding for price alignment
+        if price < 10 {
+            point.x += gfx::FONT_WIDTH * 3;
+        } else if price < 100 {
             point.x += gfx::FONT_WIDTH * 2;
-        } else {
-            point.x += gfx::FONT_WIDTH;
+        } else if price < 1000 {
+            point.x += gfx::FONT_WIDTH * 1;
         }
+
+        // Render price
+        gfx::render_currency(display, point);
+        point.x += gfx::FONT_WIDTH;
 
         let mut buf = itoa::Buffer::new();
         let price = buf.format(price);
