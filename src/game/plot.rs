@@ -14,7 +14,7 @@ const STORY_INTRO: Story = Story::new(
 
 const STORY_ACKNOWLEDGED_ESCAPE: Story = Story::new(
     &["You are free!", "", "Now what?"],
-    Unlocks::STORY_ACKNOWLEDGED_ESCAPE,
+    Unlocks::STORY_ESCAPED_CORPORATE,
 );
 
 pub const fn get<F: Flash>(campaign: &Campaign<F>) -> Game {
@@ -22,8 +22,8 @@ pub const fn get<F: Flash>(campaign: &Campaign<F>) -> Game {
         Game::Story(&STORY_INTRO)
     } else if campaign.escaped_corporate()
         && !campaign
-            .unlocks
-            .contains(Unlocks::STORY_ACKNOWLEDGED_ESCAPE)
+            .acknowledged_scenes
+            .contains(Unlocks::STORY_ESCAPED_CORPORATE)
     {
         Game::Story(&STORY_ACKNOWLEDGED_ESCAPE)
     } else {

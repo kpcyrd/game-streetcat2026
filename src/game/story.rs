@@ -28,6 +28,7 @@ impl Story {
             Event::Down => (),
             Event::A => {
                 campaign.unlocks.insert(self.unlock);
+                campaign.acknowledged_scenes.insert(self.unlock);
                 campaign.init_next();
             }
             Event::B => {}

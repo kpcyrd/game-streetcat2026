@@ -15,6 +15,7 @@ pub struct Campaign<F: Flash> {
     pub save_slot: Option<embedded_savegame::Slot>,
     pub money: u16,
     pub unlocks: Unlocks,
+    pub acknowledged_scenes: Unlocks,
     pub rng: u32,
     pub next_unlock_key: u8,
     pub next_scene: Option<Game>,
@@ -27,6 +28,7 @@ impl<F: Flash> Campaign<F> {
             save_slot: None,
             money: 0,
             unlocks: Unlocks::empty(),
+            acknowledged_scenes: Unlocks::empty(),
             rng: djb2::hash(&[]),
             next_unlock_key: 0,
             next_scene: None,
@@ -57,6 +59,7 @@ impl<F: Flash> Campaign<F> {
 
         self.money = save.get_money();
         self.unlocks = Unlocks::from_bits_truncate(save.get_unlocks());
+        self.acknowledged_scenes = self.unlocks;
 
         // Start game
         self.init_next();
