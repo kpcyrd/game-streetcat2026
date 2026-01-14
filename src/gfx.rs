@@ -12,6 +12,11 @@ pub const FISHING: ImageRaw<BinaryColor> =
     ImageRaw::new(include_bytes!("../video/fishingrod.raw"), 30);
 pub const NECKTIE: ImageRaw<BinaryColor> = ImageRaw::new(include_bytes!("../video/necktie.raw"), 7);
 
+pub const KEY: ImageRaw<BinaryColor> = ImageRaw::new(include_bytes!("../video/key.raw"), 10);
+pub const FISHBONES: ImageRaw<BinaryColor> =
+    ImageRaw::new(include_bytes!("../video/fishbones.raw"), 10);
+pub const FISH: ImageRaw<BinaryColor> = ImageRaw::new(include_bytes!("../video/fish.raw"), 10);
+
 pub const FONT: MonoFont = FONT_6X10;
 pub const FONT_HEIGHT: i32 = FONT.character_size.height as i32;
 pub const FONT_WIDTH: i32 = FONT.character_size.width as i32;

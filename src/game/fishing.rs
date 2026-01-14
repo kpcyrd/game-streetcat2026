@@ -14,7 +14,8 @@ use embedded_graphics::{
     Drawable,
     image::Image,
     pixelcolor::BinaryColor,
-    prelude::{DrawTarget, Point},
+    prelude::{DrawTarget, Point, Size},
+    primitives::Rectangle,
 };
 use embedded_savegame::storage::Flash;
 
@@ -38,6 +39,9 @@ const CAT_HEIGHT: i32 = 30;
 const OFFICE_CAT_OFFSET: Point = Point::new(0, 10);
 // The necktie position relative to the office cat
 const NECKTIE_OFFSET: Point = Point::new(17, CAT_HEIGHT + 1);
+
+const FISHING_ROD_POSITION: Point = Point::new(58, 16);
+const LOOT_CAUGHT_POSITION: Point = Point::new(108, 16);
 
 pub enum Timer {
     Random,
@@ -202,6 +206,33 @@ impl Fishing {
         }
     }
 
+    pub fn render_dumpster<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D) {
+        const DUMPSTER_HEIGHT: i32 = 10;
+        const DUMPSTER_WIDTH: i32 = 60;
+        const PAD_RIGHT: i32 = 0;
+        display
+            .fill_solid(
+                &Rectangle::new(
+                    Point::new(128 - DUMPSTER_WIDTH - PAD_RIGHT, 64 - DUMPSTER_HEIGHT),
+                    Size::new(DUMPSTER_WIDTH as u32, DUMPSTER_HEIGHT as u32),
+                ),
+                BinaryColor::On,
+            )
+            .ok();
+        display
+            .fill_solid(
+                &Rectangle::new(
+                    Point::new(
+                        128 - DUMPSTER_WIDTH - PAD_RIGHT + 2,
+                        64 - DUMPSTER_HEIGHT + 2,
+                    ),
+                    Size::new(30 - 4, DUMPSTER_HEIGHT as u32),
+                ),
+                BinaryColor::Off,
+            )
+            .ok();
+    }
+
     pub fn render<D: DrawTarget<Color = BinaryColor>, F: Flash>(
         &self,
         display: &mut D,
@@ -212,7 +243,7 @@ impl Fishing {
             gfx::render_balance(display, campaign.money);
 
             // Fishing rod
-            let mut point = Point::new(64, 16);
+            let mut point = FISHING_ROD_POSITION;
             if self.spawn_timer <= 0 && self.spawn_timer & 4 == 4 {
                 point += Point::new(0, 4);
             }
@@ -231,7 +262,18 @@ impl Fishing {
                 Text::new(loot.description(), Point::new(15, 0))
                     .draw(display)
                     .ok();
+
+                // Render img
+                let img = match loot {
+                    Loot::Key => &gfx::KEY,
+                    Loot::Bones => &gfx::FISHBONES,
+                    Loot::Fish | Loot::BestFish => &gfx::FISH,
+                };
+                Image::new(img, LOOT_CAUGHT_POSITION).draw(display).ok();
             }
+
+            // Render dumpster
+            self.render_dumpster(display);
 
             // The cat position
             STANDARD_CAT_POSITION
