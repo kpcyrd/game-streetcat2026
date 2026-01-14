@@ -6,6 +6,7 @@ use embedded_graphics::{
 
 const OFFSET: Point = Point::new(112, 5);
 const SIZE: Size = Size::new(8, 40);
+const INNER_HEIGHT: u32 = SIZE.height - 2;
 const INNER_WIDTH: u32 = SIZE.width - 2;
 
 pub const MEDIUM: Skillcheck = Skillcheck::new(4, 15);
@@ -14,24 +15,23 @@ pub const HARD: Skillcheck = Skillcheck::new(3, 18);
 pub struct Skillcheck {
     speed: u8,
     cursor: u8,
-    size: u8,
-    bottom_offset: u8,
+    padding: u8,
 }
 
 impl Skillcheck {
-    pub const fn new(speed: u8, size: u8) -> Self {
+    pub const fn new(speed: u8, padding: u8) -> Self {
         // TODO: this is slightly risky because it may execute at runtime
-        assert!(size as u32 * 2 <= SIZE.height);
+        assert!(padding as u32 * 2 <= SIZE.height);
         Skillcheck {
             speed,
             cursor: 0,
-            bottom_offset: (OFFSET.y as u32 + SIZE.height - size as u32 - 1) as u8,
-            size,
+            padding,
         }
     }
 
     pub const fn try_catch(&self) -> bool {
-        self.cursor >= self.size && self.cursor <= (SIZE.height as u8 - self.size)
+        // Keep in mind, the rendered box is offset by 1
+        self.cursor > self.padding && self.cursor <= (SIZE.height as u8 - self.padding)
     }
 
     pub fn tick(&mut self) {
@@ -47,18 +47,20 @@ impl Skillcheck {
             .fill_solid(
                 &Rectangle::new(
                     OFFSET + Point::new(1, 1),
-                    Size::new(INNER_WIDTH, self.size as u32),
+                    Size::new(INNER_WIDTH, INNER_HEIGHT),
                 ),
                 BinaryColor::Off,
             )
             .ok();
+
+        // Render hitbox
         display
             .fill_solid(
                 &Rectangle::new(
-                    Point::new(OFFSET.x + 1, self.bottom_offset as i32),
-                    Size::new(INNER_WIDTH, self.size as u32),
+                    OFFSET + Point::new(1, 1 + self.padding as i32),
+                    Size::new(INNER_WIDTH, INNER_HEIGHT - (self.padding as u32 * 2)),
                 ),
-                BinaryColor::Off,
+                BinaryColor::On,
             )
             .ok();
 
