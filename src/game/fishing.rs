@@ -1,5 +1,5 @@
 use crate::{
-    game::{Game, Unlocks, campaign::Campaign},
+    game::{Game, Unlocks, campaign::Campaign, skillcheck::Skillcheck},
     gfx,
     input::Event,
     text::Text,
@@ -202,6 +202,9 @@ impl Fishing {
             if campaign.unlocks.contains(Unlocks::first_shop_unlock()) {
                 Text::new("B: Shop", gfx::LAST_LINE_B).draw(display).ok();
             }
+
+            // Show skill-check
+            Skillcheck::new(1, 15).render(display);
 
             // The cat position
             STANDARD_CAT_POSITION

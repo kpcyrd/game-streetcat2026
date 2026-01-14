@@ -5,6 +5,7 @@ use embedded_graphics::{
     mono_font::{MonoFont, ascii::FONT_6X10},
     pixelcolor::BinaryColor,
     prelude::{DrawTarget, Point},
+    primitives::PrimitiveStyle,
 };
 
 pub const CAT: ImageRaw<BinaryColor> = ImageRaw::new(include_bytes!("../video/cat.raw"), 36);
@@ -19,6 +20,9 @@ pub const FONT_WIDTH: i32 = FONT.character_size.width as i32;
 pub const LAST_LINE: i32 = 64 - FONT_HEIGHT;
 pub const LAST_LINE_A: Point = Point::new(62, LAST_LINE);
 pub const LAST_LINE_B: Point = Point::new(2, LAST_LINE);
+
+pub const WHITE: PrimitiveStyle<BinaryColor> = PrimitiveStyle::with_fill(BinaryColor::On);
+pub const BLACK: PrimitiveStyle<BinaryColor> = PrimitiveStyle::with_fill(BinaryColor::Off);
 
 // The position to render your current balance
 const MONEY_POSITION: Point = Point::new(64, 0);

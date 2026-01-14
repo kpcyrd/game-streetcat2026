@@ -8,7 +8,7 @@ mod input;
 mod savegame;
 mod text;
 
-use crate::game::{Game, campaign::Campaign};
+use crate::game::{Game, Unlocks, campaign::Campaign};
 use ch32_hal::{
     self as hal,
     // delay::Delay,
@@ -55,6 +55,15 @@ fn main() -> ! {
     let mut game = Game::start();
     let mut campaign = Campaign::new(flash);
     campaign.scan_savegames();
+
+    // Allow booting directly into fishing for dev purposes
+    if option_env!("BOOT_GAME").is_some() {
+        game = Game::fishing(game::fishing::Timer::Onboarding);
+        campaign.unlocks.insert(Unlocks::STORY_ESCAPED_CORPORATE);
+        campaign
+            .acknowledged_scenes
+            .insert(Unlocks::STORY_ESCAPED_CORPORATE);
+    }
 
     loop {
         // Render
