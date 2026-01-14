@@ -25,16 +25,14 @@ const STORY_SHOP_UNLOCKED: Story =
 pub const fn get<F: Flash>(campaign: &Campaign<F>) -> Game {
     if !campaign.unlocks.contains(Unlocks::STORY_INTRO) {
         Game::Story(&STORY_INTRO)
-    } else if campaign.escaped_corporate()
-        && !campaign
-            .acknowledged_scenes
-            .contains(Unlocks::STORY_ESCAPED_CORPORATE)
+    } else if campaign
+        .unacknowledged()
+        .contains(Unlocks::STORY_ESCAPED_CORPORATE)
     {
         Game::Story(&STORY_ACKNOWLEDGED_ESCAPE)
-    } else if campaign.unlocks.contains(Unlocks::SHOP_UPGRADED_ROD)
-        && !campaign
-            .acknowledged_scenes
-            .contains(Unlocks::SHOP_UPGRADED_ROD)
+    } else if campaign
+        .unacknowledged()
+        .contains(Unlocks::first_shop_unlock())
     {
         Game::Story(&STORY_SHOP_UNLOCKED)
     } else {

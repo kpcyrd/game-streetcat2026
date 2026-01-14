@@ -71,6 +71,10 @@ impl<F: Flash> Campaign<F> {
         self.next_scene = Some(plot::get(self));
     }
 
+    pub const fn unacknowledged(&self) -> Unlocks {
+        self.unlocks.symmetric_difference(self.acknowledged_scenes)
+    }
+
     pub const fn escaped_corporate(&self) -> bool {
         self.unlocks.contains(Unlocks::STORY_ESCAPED_CORPORATE)
     }
