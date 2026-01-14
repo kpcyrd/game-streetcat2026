@@ -19,7 +19,7 @@ const MAX_ITEM_NAME: usize = 13;
 
 const SHOP_MENU: &[&[ShopItem]] = &[
     &[ShopItem::UpgradedRod],
-    &[ShopItem::Bait],
+    &[ShopItem::BasicBait],
     &[ShopItem::BetterRates],
 ];
 
@@ -45,7 +45,7 @@ const _: () = const {
 #[derive(Debug, Clone, Copy)]
 pub enum ShopItem {
     UpgradedRod,
-    Bait,
+    BasicBait,
     BetterRates,
 }
 
@@ -53,7 +53,7 @@ impl ShopItem {
     pub const fn price(&self) -> u16 {
         match self {
             ShopItem::UpgradedRod => 100,
-            ShopItem::Bait => 50,
+            ShopItem::BasicBait => 50,
             ShopItem::BetterRates => 200,
         }
     }
@@ -61,7 +61,7 @@ impl ShopItem {
     pub const fn text(&self) -> &'static str {
         match self {
             ShopItem::UpgradedRod => "Upgraded Rod",
-            ShopItem::Bait => "Bait",
+            ShopItem::BasicBait => "Basic Bait",
             ShopItem::BetterRates => "Better Rates",
         }
     }
@@ -69,7 +69,7 @@ impl ShopItem {
     pub const fn depends(&self) -> Unlocks {
         match self {
             ShopItem::UpgradedRod => Unlocks::SHOP_UPGRADED_ROD,
-            ShopItem::Bait => Unlocks::SHOP_UNLOCKED_BAIT,
+            ShopItem::BasicBait => Unlocks::SHOP_BASIC_BAIT,
             ShopItem::BetterRates => Unlocks::SHOP_BETTER_RATES,
         }
     }
@@ -77,7 +77,7 @@ impl ShopItem {
     pub const fn unlocks(&self) -> Unlocks {
         match self {
             ShopItem::UpgradedRod => Unlocks::BOUGHT_UPGRADED_ROD,
-            ShopItem::Bait => Unlocks::BOUGHT_UNLOCKED_BAIT,
+            ShopItem::BasicBait => Unlocks::BOUGHT_BASIC_BAIT,
             ShopItem::BetterRates => Unlocks::BOUGHT_BETTER_RATES,
         }
     }

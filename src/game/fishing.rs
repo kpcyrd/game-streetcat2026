@@ -108,7 +108,7 @@ impl Fishing {
     fn determine_catch<F: Flash>(&mut self, campaign: &mut Campaign<F>) -> Loot {
         if campaign.next_unlock_key == 0 {
             Loot::Key
-        } else if !campaign.unlocks.contains(Unlocks::BOUGHT_UNLOCKED_BAIT) {
+        } else if !campaign.unlocks.contains(Unlocks::BOUGHT_BASIC_BAIT) {
             Loot::Bones
         } else {
             let num = (campaign.rng & RNG_MASK) as u16;

@@ -25,8 +25,8 @@ bitflags! {
         const BOUGHT_UPGRADED_ROD = 0b1 << 4;
 
         // Upgraded bait
-        const SHOP_UNLOCKED_BAIT = 0b1 << 5;
-        const BOUGHT_UNLOCKED_BAIT = 0b1 << 6;
+        const SHOP_BASIC_BAIT = 0b1 << 5;
+        const BOUGHT_BASIC_BAIT = 0b1 << 6;
 
         // Upgraded rates
         const SHOP_BETTER_RATES = 0b1 << 7;
@@ -46,8 +46,8 @@ impl Unlocks {
     pub const fn next_unlock(&self) -> Option<Unlocks> {
         if !self.contains(Unlocks::SHOP_UPGRADED_ROD) {
             Some(Unlocks::SHOP_UPGRADED_ROD)
-        } else if !self.contains(Unlocks::SHOP_UNLOCKED_BAIT) {
-            Some(Unlocks::SHOP_UNLOCKED_BAIT)
+        } else if !self.contains(Unlocks::SHOP_BASIC_BAIT) {
+            Some(Unlocks::SHOP_BASIC_BAIT)
         } else if !self.contains(Unlocks::SHOP_BETTER_RATES) {
             Some(Unlocks::SHOP_BETTER_RATES)
         } else {
