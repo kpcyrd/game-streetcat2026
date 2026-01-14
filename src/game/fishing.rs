@@ -40,8 +40,12 @@ const OFFICE_CAT_OFFSET: Point = Point::new(0, 10);
 // The necktie position relative to the office cat
 const NECKTIE_OFFSET: Point = Point::new(17, CAT_HEIGHT + 1);
 
-const FISHING_ROD_POSITION: Point = Point::new(58, 16);
-const LOOT_CAUGHT_POSITION: Point = Point::new(108, 16);
+const FISHING_ROD_POSITION: Point = Point::new(56, 16);
+const LOOT_CAUGHT_POSITION: Point = Point::new(106, 16);
+
+const DUMPSTER_HEIGHT: i32 = 10;
+const DUMPSTER_WIDTH: i32 = 60;
+const DUMPSTER_POSITION: Point = Point::new(128 - DUMPSTER_WIDTH, 64 - DUMPSTER_HEIGHT);
 
 pub enum Timer {
     Random,
@@ -207,13 +211,10 @@ impl Fishing {
     }
 
     pub fn render_dumpster<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D) {
-        const DUMPSTER_HEIGHT: i32 = 10;
-        const DUMPSTER_WIDTH: i32 = 60;
-        const PAD_RIGHT: i32 = 0;
         display
             .fill_solid(
                 &Rectangle::new(
-                    Point::new(128 - DUMPSTER_WIDTH - PAD_RIGHT, 64 - DUMPSTER_HEIGHT),
+                    DUMPSTER_POSITION,
                     Size::new(DUMPSTER_WIDTH as u32, DUMPSTER_HEIGHT as u32),
                 ),
                 BinaryColor::On,
@@ -222,15 +223,22 @@ impl Fishing {
         display
             .fill_solid(
                 &Rectangle::new(
-                    Point::new(
-                        128 - DUMPSTER_WIDTH - PAD_RIGHT + 2,
-                        64 - DUMPSTER_HEIGHT + 2,
-                    ),
-                    Size::new(30 - 4, DUMPSTER_HEIGHT as u32),
+                    DUMPSTER_POSITION + Point::new(2, 2),
+                    Size::new(30 - 4, DUMPSTER_HEIGHT as u32 - 2),
                 ),
                 BinaryColor::Off,
             )
             .ok();
+
+        for i in 0..3 {
+            let mut point = DUMPSTER_POSITION + Point::new(34, 3);
+            point += Point::new(i * 9, 0);
+            let size = Size::new(4, DUMPSTER_HEIGHT as u32 - 3);
+
+            display
+                .fill_solid(&Rectangle::new(point, size), BinaryColor::Off)
+                .ok();
+        }
     }
 
     pub fn render<D: DrawTarget<Color = BinaryColor>, F: Flash>(
