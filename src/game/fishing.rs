@@ -1,5 +1,9 @@
 use crate::{
-    game::{Game, Unlocks, campaign::Campaign},
+    game::{
+        Game, Unlocks,
+        campaign::Campaign,
+        skillcheck::{self, Skillcheck},
+    },
     gfx,
     input::Event,
     text::Text,
@@ -70,6 +74,7 @@ impl Loot {
 pub struct Fishing {
     spawn_timer: i16,
     caught: Option<Loot>,
+    skillcheck: Option<Skillcheck>,
 }
 
 impl Fishing {
@@ -80,6 +85,7 @@ impl Fishing {
                 Timer::Onboarding => GOOD_START_VALUE,
             },
             caught: None,
+            skillcheck: None,
         }
     }
 
@@ -105,8 +111,10 @@ impl Fishing {
         }
     }
 
-    fn determine_catch<F: Flash>(&mut self, campaign: &mut Campaign<F>) -> Loot {
-        if campaign.next_unlock_key == 0 {
+    fn determine_catch<F: Flash>(&self, campaign: &mut Campaign<F>) -> (Loot, Option<Skillcheck>) {
+        let mut skillcheck = None;
+
+        let loot = if campaign.next_unlock_key == 0 {
             Loot::Key
         } else if !campaign.unlocks.contains(Unlocks::BOUGHT_BASIC_BAIT) {
             Loot::Bones
@@ -116,12 +124,15 @@ impl Fishing {
             if num < 15 {
                 Loot::Bones
             } else if num < 252 {
+                skillcheck = Some(skillcheck::MEDIUM);
                 Loot::Fish
             } else {
                 // This should only be possible with the best tools/bait
+                skillcheck = Some(skillcheck::HARD);
                 Loot::BestFish
             }
-        }
+        };
+        (loot, skillcheck)
     }
 
     pub fn event<F: Flash>(&mut self, event: Event, campaign: &mut Campaign<F>) {
@@ -129,7 +140,12 @@ impl Fishing {
             Event::Up => (),
             Event::Down => (),
             Event::A => {
-                if self.caught.is_some() {
+                if let Some(skillcheck) = self.skillcheck.take() {
+                    if !skillcheck.try_catch() {
+                        self.caught = None;
+                        self.setup_spawn_timer(campaign);
+                    }
+                } else if self.caught.is_some() {
                     // If we showed our successful catch, remove it now
                     self.collect_loot(campaign);
                 } else if self.spawn_timer <= 0 {
@@ -141,7 +157,9 @@ impl Fishing {
                         }
 
                         // Randomize money reward
-                        self.caught = Some(self.determine_catch(campaign));
+                        let (loot, skillcheck) = self.determine_catch(campaign);
+                        self.caught = Some(loot);
+                        self.skillcheck = skillcheck;
                     } else {
                         self.add_reward(10, campaign);
                     }
@@ -164,7 +182,10 @@ impl Fishing {
     }
 
     pub fn tick<F: Flash>(&mut self, campaign: &mut Campaign<F>) {
-        if self.caught.is_some() {
+        if let Some(skillcheck) = &mut self.skillcheck {
+            // Update skillcheck cursor
+            skillcheck.tick();
+        } else if self.caught.is_some() {
             // Waiting for player to acknowledge catch
         } else if self.spawn_timer < ESCAPE_THRESHOLD && campaign.escaped_corporate() {
             // Fish escaped
@@ -181,13 +202,6 @@ impl Fishing {
         campaign: &Campaign<F>,
     ) {
         let cat_point = if campaign.escaped_corporate() {
-            if let Some(loot) = self.caught {
-                // Show caught loot
-                Text::new(loot.description(), Point::new(15, 0))
-                    .draw(display)
-                    .ok();
-            }
-
             // Money
             gfx::render_balance(display, campaign.money);
 
@@ -201,6 +215,16 @@ impl Fishing {
             // Hint that there's a shop
             if campaign.unlocks.contains(Unlocks::first_shop_unlock()) {
                 Text::new("B: Shop", gfx::LAST_LINE_B).draw(display).ok();
+            }
+
+            if let Some(skillcheck) = &self.skillcheck {
+                // Show skill-check
+                skillcheck.render(display);
+            } else if let Some(loot) = self.caught {
+                // Show caught loot
+                Text::new(loot.description(), Point::new(15, 0))
+                    .draw(display)
+                    .ok();
             }
 
             // The cat position

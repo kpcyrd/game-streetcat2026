@@ -2,6 +2,7 @@ pub mod campaign;
 pub mod fishing;
 pub mod plot;
 pub mod shop;
+pub mod skillcheck;
 pub mod start;
 pub mod story;
 
