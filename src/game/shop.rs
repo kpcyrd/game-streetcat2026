@@ -15,7 +15,7 @@ const MENU_LIMIT: usize = 3;
 const CURSOR_LEFT_PAD: i32 = gfx::FONT_WIDTH * 2;
 const ITEM_LEFT_PAD: i32 = CURSOR_LEFT_PAD + gfx::FONT_WIDTH * 6;
 
-const MAX_ITEM_NAME: usize = 12;
+const MAX_ITEM_NAME: usize = 13;
 
 const SHOP_MENU: &[&[ShopItem]] = &[
     &[ShopItem::UpgradedRod],
