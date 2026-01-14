@@ -32,7 +32,7 @@ const MAX_WAIT_DURATION: i16 = 12;
 const GOOD_START_VALUE: i16 = 35;
 
 // The default position if we don't render any extras
-const STANDARD_CAT_POSITION: Point = Point::new(8, 16);
+const STANDARD_CAT_POSITION: Point = Point::new(12, 16);
 // The size of the cat image
 const CAT_HEIGHT: i32 = 30;
 // The office cat offset (higher to make room for the necktie)
@@ -41,7 +41,9 @@ const OFFICE_CAT_OFFSET: Point = Point::new(0, 10);
 const NECKTIE_OFFSET: Point = Point::new(17, CAT_HEIGHT + 1);
 
 const FISHING_ROD_POSITION: Point = Point::new(56, 16);
-const LOOT_CAUGHT_POSITION: Point = Point::new(106, 16);
+const LOOT_CAUGHT_POSITION: Point = Point::new(104, 18);
+
+const REWARD_POSITION: Point = Point::new(19, 0);
 
 const DUMPSTER_HEIGHT: i32 = 10;
 const DUMPSTER_WIDTH: i32 = 60;
@@ -267,7 +269,7 @@ impl Fishing {
                 skillcheck.render(display);
             } else if let Some(loot) = self.caught {
                 // Show caught loot
-                Text::new(loot.description(), Point::new(15, 0))
+                Text::new(loot.description(), REWARD_POSITION)
                     .draw(display)
                     .ok();
 
@@ -288,7 +290,7 @@ impl Fishing {
         } else {
             // Email
             if self.spawn_timer <= 0 {
-                Text::new("New Email!", Point::new(60, 8))
+                Text::new("New Email!", Point::new(62, 8))
                     .draw(display)
                     .ok();
             }
