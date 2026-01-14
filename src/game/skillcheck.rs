@@ -9,6 +9,9 @@ const OFFSET: Point = Point::new(112, 5);
 const SIZE: Size = Size::new(8, 40);
 const INNER_WIDTH: u32 = SIZE.width - 2;
 
+pub const MEDIUM: Skillcheck = Skillcheck::new(4, 15);
+pub const HARD: Skillcheck = Skillcheck::new(3, 18);
+
 pub struct Skillcheck {
     speed: u8,
     cursor: u8,
@@ -18,6 +21,8 @@ pub struct Skillcheck {
 
 impl Skillcheck {
     pub const fn new(speed: u8, size: u8) -> Self {
+        // TODO: this is slightly risky because it may execute at runtime
+        assert!(size as u32 * 2 <= SIZE.height);
         Skillcheck {
             speed,
             cursor: 0,

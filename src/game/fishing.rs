@@ -1,5 +1,9 @@
 use crate::{
-    game::{Game, Unlocks, campaign::Campaign, skillcheck::Skillcheck},
+    game::{
+        Game, Unlocks,
+        campaign::Campaign,
+        skillcheck::{self, Skillcheck},
+    },
     gfx,
     input::Event,
     text::Text,
@@ -120,11 +124,11 @@ impl Fishing {
             if num < 15 {
                 Loot::Bones
             } else if num < 252 {
-                skillcheck = Some(Skillcheck::new(4, 15));
+                skillcheck = Some(skillcheck::MEDIUM);
                 Loot::Fish
             } else {
                 // This should only be possible with the best tools/bait
-                skillcheck = Some(Skillcheck::new(2, 25));
+                skillcheck = Some(skillcheck::HARD);
                 Loot::BestFish
             }
         };
@@ -139,6 +143,7 @@ impl Fishing {
                 if let Some(skillcheck) = self.skillcheck.take() {
                     if !skillcheck.try_catch() {
                         self.caught = None;
+                        self.setup_spawn_timer(campaign);
                     }
                 } else if self.caught.is_some() {
                     // If we showed our successful catch, remove it now
