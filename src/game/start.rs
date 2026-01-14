@@ -16,7 +16,7 @@ const ITEM_LEFT_PAD: i32 = CURSOR_LEFT_PAD + gfx::FONT_WIDTH * 2;
 const ITEM_1: Point = Point::new(ITEM_LEFT_PAD, FONT_HEIGHT * 2);
 const ITEM_2: Point = Point::new(ITEM_LEFT_PAD, FONT_HEIGHT * 3);
 
-const TITLE: &str = "Title (2026)";
+const TITLE: &str = "Street Cat (2026)";
 const TITLE_POINT: Point = Point::new((128 - (TITLE.len() as i32 * gfx::FONT_WIDTH)) / 2, 0);
 
 pub struct Start {
