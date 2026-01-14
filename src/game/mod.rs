@@ -28,6 +28,15 @@ bitflags! {
         const SHOP_BASIC_BAIT = 0b1 << 5;
         const BOUGHT_BASIC_BAIT = 0b1 << 6;
 
+        const SHOP_TASTY_BAIT = 0b1 << 9;
+        const BOUGHT_TASTY_BAIT = 0b1 << 10;
+
+        const SHOP_PREMIUM_BAIT = 0b1 << 11;
+        const BOUGHT_PREMIUM_BAIT = 0b1 << 12;
+
+        const SHOP_HEAVENLY_BAIT = 0b1 << 13;
+        const BOUGHT_HEAVENLY_BAIT = 0b1 << 14;
+
         // Upgraded rates
         const SHOP_BETTER_RATES = 0b1 << 7;
         const BOUGHT_BETTER_RATES = 0b1 << 8;

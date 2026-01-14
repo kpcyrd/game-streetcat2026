@@ -19,7 +19,12 @@ const MAX_ITEM_NAME: usize = 13;
 
 const SHOP_MENU: &[&[ShopItem]] = &[
     &[ShopItem::UpgradedRod],
-    &[ShopItem::BasicBait],
+    &[
+        ShopItem::BasicBait,
+        ShopItem::TastyBait,
+        ShopItem::PremiumBait,
+        ShopItem::HeavenlyBait,
+    ],
     &[ShopItem::BetterRates],
 ];
 
@@ -44,40 +49,70 @@ const _: () = const {
 
 #[derive(Debug, Clone, Copy)]
 pub enum ShopItem {
+    // Slot 1
     UpgradedRod,
+    // Slot 2
     BasicBait,
+    TastyBait,
+    PremiumBait,
+    HeavenlyBait,
+    // Slot 3
     BetterRates,
 }
 
 impl ShopItem {
     pub const fn price(&self) -> u16 {
         match self {
+            // Slot 1
             ShopItem::UpgradedRod => 100,
+            // Slot 2
             ShopItem::BasicBait => 50,
+            ShopItem::TastyBait => 75,
+            ShopItem::PremiumBait => 150,
+            ShopItem::HeavenlyBait => 300,
+            // Slot 3
             ShopItem::BetterRates => 200,
         }
     }
 
     pub const fn text(&self) -> &'static str {
         match self {
+            // Slot 1
             ShopItem::UpgradedRod => "Upgraded Rod",
+            // Slot 2
             ShopItem::BasicBait => "Basic Bait",
+            ShopItem::TastyBait => "Tasty Bait",
+            ShopItem::PremiumBait => "Premium Bait",
+            ShopItem::HeavenlyBait => "Heavenly Bait",
+            // Slot 3
             ShopItem::BetterRates => "Better Rates",
         }
     }
 
     pub const fn depends(&self) -> Unlocks {
         match self {
+            // Slot 1
             ShopItem::UpgradedRod => Unlocks::SHOP_UPGRADED_ROD,
+            // Slot 2
             ShopItem::BasicBait => Unlocks::SHOP_BASIC_BAIT,
+            ShopItem::TastyBait => Unlocks::SHOP_TASTY_BAIT,
+            ShopItem::PremiumBait => Unlocks::SHOP_PREMIUM_BAIT,
+            ShopItem::HeavenlyBait => Unlocks::SHOP_HEAVENLY_BAIT,
+            // Slot 3
             ShopItem::BetterRates => Unlocks::SHOP_BETTER_RATES,
         }
     }
 
     pub const fn unlocks(&self) -> Unlocks {
         match self {
+            // Slot 1
             ShopItem::UpgradedRod => Unlocks::BOUGHT_UPGRADED_ROD,
+            // Slot 2
             ShopItem::BasicBait => Unlocks::BOUGHT_BASIC_BAIT,
+            ShopItem::TastyBait => Unlocks::BOUGHT_TASTY_BAIT,
+            ShopItem::PremiumBait => Unlocks::BOUGHT_PREMIUM_BAIT,
+            ShopItem::HeavenlyBait => Unlocks::BOUGHT_HEAVENLY_BAIT,
+            // Slot 3
             ShopItem::BetterRates => Unlocks::BOUGHT_BETTER_RATES,
         }
     }
