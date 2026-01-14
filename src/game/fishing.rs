@@ -2,6 +2,7 @@ use crate::{
     game::{
         Game, Unlocks,
         campaign::Campaign,
+        plot::STORY_UNLOCKS,
         skillcheck::{self, Skillcheck},
     },
     gfx,
@@ -108,6 +109,15 @@ impl Fishing {
                 campaign.setup_next_unlock_key();
             }
             self.add_reward(loot.reward(), campaign);
+
+            // Some unlocks may trigger story scenes
+            if campaign
+                .unlocks
+                .symmetric_difference(campaign.acknowledged_scenes)
+                .intersects(STORY_UNLOCKS)
+            {
+                campaign.init_next();
+            }
         }
     }
 
