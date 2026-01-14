@@ -25,7 +25,7 @@ const SHOP_MENU: &[&[ShopItem]] = &[
         ShopItem::PremiumBait,
         ShopItem::HeavenlyBait,
     ],
-    &[ShopItem::BetterRates],
+    &[ShopItem::BetterRates, ShopItem::KingStatus],
 ];
 
 // Sanity checks
@@ -58,6 +58,7 @@ pub enum ShopItem {
     HeavenlyBait,
     // Slot 3
     BetterRates,
+    KingStatus,
 }
 
 impl ShopItem {
@@ -72,6 +73,7 @@ impl ShopItem {
             ShopItem::HeavenlyBait => 300,
             // Slot 3
             ShopItem::BetterRates => 200,
+            ShopItem::KingStatus => 9_999,
         }
     }
 
@@ -86,6 +88,7 @@ impl ShopItem {
             ShopItem::HeavenlyBait => "Heavenly Bait",
             // Slot 3
             ShopItem::BetterRates => "Better Rates",
+            ShopItem::KingStatus => "King Status",
         }
     }
 
@@ -100,6 +103,7 @@ impl ShopItem {
             ShopItem::HeavenlyBait => Unlocks::SHOP_HEAVENLY_BAIT,
             // Slot 3
             ShopItem::BetterRates => Unlocks::SHOP_BETTER_RATES,
+            ShopItem::KingStatus => Unlocks::BOUGHT_BETTER_RATES,
         }
     }
 
@@ -114,6 +118,7 @@ impl ShopItem {
             ShopItem::HeavenlyBait => Unlocks::BOUGHT_HEAVENLY_BAIT,
             // Slot 3
             ShopItem::BetterRates => Unlocks::BOUGHT_BETTER_RATES,
+            ShopItem::KingStatus => Unlocks::KING_STATUS,
         }
     }
 
