@@ -26,6 +26,14 @@ impl Skillcheck {
         }
     }
 
+    pub const fn try_catch(&self) -> bool {
+        self.cursor >= self.size && self.cursor <= (SIZE.height as u8 - self.size)
+    }
+
+    pub fn tick(&mut self) {
+        self.cursor = (self.cursor + self.speed) % (SIZE.height as u8);
+    }
+
     pub fn render<D: DrawTarget<Color = BinaryColor>>(&self, display: &mut D) {
         // Render box
         Rectangle::new(OFFSET, SIZE)
@@ -45,7 +53,7 @@ impl Skillcheck {
         .ok();
 
         // Render cursor
-        Rectangle::new(Point::new(122, 5), Size::new(6, 1))
+        Rectangle::new(Point::new(122, (5 + self.cursor) as i32), Size::new(6, 1))
             .draw_styled(&gfx::WHITE, display)
             .ok();
     }
