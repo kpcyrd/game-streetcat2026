@@ -17,6 +17,10 @@ pub const FISHBONES: ImageRaw<BinaryColor> =
     ImageRaw::new(include_bytes!("../video/fishbones.raw"), 10);
 pub const FISH: ImageRaw<BinaryColor> = ImageRaw::new(include_bytes!("../video/fish.raw"), 10);
 
+pub const CROWN: ImageRaw<BinaryColor> = ImageRaw::new(include_bytes!("../video/crown.raw"), 31);
+pub const CROWN_OFFSET: Point = Point::new(3, -24);
+pub const CROWN_CAT_OFFSET: Point = Point::new(0, 8);
+
 pub const FONT: MonoFont = FONT_6X10;
 pub const FONT_HEIGHT: i32 = FONT.character_size.height as i32;
 pub const FONT_WIDTH: i32 = FONT.character_size.width as i32;

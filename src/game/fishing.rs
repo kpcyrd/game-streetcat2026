@@ -5,7 +5,7 @@ use crate::{
         plot,
         skillcheck::{self, Skillcheck},
     },
-    gfx,
+    gfx::{self, CROWN_CAT_OFFSET},
     input::Event,
     text::Text,
 };
@@ -48,6 +48,12 @@ const REWARD_POSITION: Point = Point::new(19, 0);
 const DUMPSTER_HEIGHT: i32 = 10;
 const DUMPSTER_WIDTH: i32 = 60;
 const DUMPSTER_POSITION: Point = Point::new(128 - DUMPSTER_WIDTH, 64 - DUMPSTER_HEIGHT);
+
+const _: () = const {
+    // Technically the entire thing is 54, so 5px on each side would be centered,
+    // but this looks better.
+    assert!(STANDARD_CAT_POSITION.y + CROWN_CAT_OFFSET.y + gfx::CROWN_OFFSET.y == 0);
+};
 
 pub enum Timer {
     Random,
@@ -286,7 +292,11 @@ impl Fishing {
             self.render_dumpster(display);
 
             // The cat position
-            STANDARD_CAT_POSITION
+            if campaign.unlocks.contains(Unlocks::KING_STATUS) {
+                STANDARD_CAT_POSITION + gfx::CROWN_CAT_OFFSET
+            } else {
+                STANDARD_CAT_POSITION
+            }
         } else {
             // Email
             if self.spawn_timer <= 0 {
@@ -315,6 +325,18 @@ impl Fishing {
         };
 
         // Draw cat
-        Image::new(&gfx::CAT, cat_point).draw(display).ok();
+        Image::new(&gfx::CAT, cat_point)
+            .draw(display)
+            .ok();
+
+        // King status
+        if campaign.unlocks.contains(Unlocks::KING_STATUS) {
+            Image::new(
+                &gfx::CROWN,
+                STANDARD_CAT_POSITION + gfx::CROWN_CAT_OFFSET + gfx::CROWN_OFFSET,
+            )
+            .draw(display)
+            .ok();
+        }
     }
 }
