@@ -325,9 +325,7 @@ impl Fishing {
         };
 
         // Draw cat
-        Image::new(&gfx::CAT, cat_point)
-            .draw(display)
-            .ok();
+        Image::new(&gfx::CAT, cat_point).draw(display).ok();
 
         // King status
         if campaign.unlocks.contains(Unlocks::KING_STATUS) {
