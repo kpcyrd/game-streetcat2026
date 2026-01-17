@@ -393,7 +393,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "game-minimeow"
+name = "game-streetcat2026"
 version = "0.1.0"
 dependencies = [
  "arrayref",
