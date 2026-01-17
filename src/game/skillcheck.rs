@@ -9,8 +9,10 @@ const SIZE: Size = Size::new(8, 40);
 const INNER_HEIGHT: u32 = SIZE.height - 2;
 const INNER_WIDTH: u32 = SIZE.width - 2;
 
-pub const MEDIUM: Skillcheck = Skillcheck::new(4, 15);
-pub const HARD: Skillcheck = Skillcheck::new(3, 18);
+pub const EASY: Skillcheck = Skillcheck::new(5, 14);
+pub const MEDIUM: Skillcheck = Skillcheck::new(6, 15);
+pub const HARD: Skillcheck = Skillcheck::new(4, 18);
+pub const IMPOSSIBLE: Skillcheck = Skillcheck::new(8, 18);
 
 pub struct Skillcheck {
     speed: u8,

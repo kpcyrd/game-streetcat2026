@@ -12,14 +12,14 @@ use crate::{
 use core::cmp;
 use embedded_graphics::{
     Drawable,
-    image::Image,
+    image::{Image, ImageRaw},
     pixelcolor::BinaryColor,
     prelude::{DrawTarget, Point, Size},
     primitives::Rectangle,
 };
 use embedded_savegame::storage::Flash;
 
-const ESCAPE_THRESHOLD: i16 = -40;
+const ESCAPE_THRESHOLD: i16 = -20;
 // Align the max with the RNG mask for good distribution
 const RNG_MASK: u32 = 0xFF;
 // const MAX_WAIT_DURATION: i16 = 120;
@@ -65,6 +65,7 @@ pub enum Loot {
     Key,
     Bones,
     Fish,
+    BetterFish,
     BestFish,
 }
 
@@ -74,6 +75,7 @@ impl Loot {
             Loot::Key => 0,
             Loot::Bones => 5,
             Loot::Fish => 10,
+            Loot::BetterFish => 50,
             Loot::BestFish => 250,
         }
     }
@@ -83,7 +85,16 @@ impl Loot {
             Loot::Key => "Key!",
             Loot::Bones => "+5",
             Loot::Fish => "+10",
+            Loot::BetterFish => "+50",
             Loot::BestFish => "+250",
+        }
+    }
+
+    pub const fn img(&self) -> &'static ImageRaw<'static, BinaryColor> {
+        match self {
+            Loot::Key => &gfx::KEY,
+            Loot::Bones => &gfx::FISHBONES,
+            Loot::Fish | Loot::BetterFish | Loot::BestFish => &gfx::FISH,
         }
     }
 }
@@ -266,7 +277,9 @@ impl Fishing {
             Image::new(&gfx::FISHING, point).draw(display).ok();
 
             // Hint that there's a shop
-            if campaign.unlocks.contains(Unlocks::first_shop_unlock()) {
+            if campaign.unlocks.contains(Unlocks::first_shop_unlock())
+                && !campaign.unlocks.contains(Unlocks::BOUGHT_KING_STATUS)
+            {
                 Text::new("B: Shop", gfx::LAST_LINE_B).draw(display).ok();
             }
 
@@ -280,12 +293,9 @@ impl Fishing {
                     .ok();
 
                 // Render img
-                let img = match loot {
-                    Loot::Key => &gfx::KEY,
-                    Loot::Bones => &gfx::FISHBONES,
-                    Loot::Fish | Loot::BestFish => &gfx::FISH,
-                };
-                Image::new(img, LOOT_CAUGHT_POSITION).draw(display).ok();
+                Image::new(loot.img(), LOOT_CAUGHT_POSITION)
+                    .draw(display)
+                    .ok();
             }
 
             // Render dumpster
