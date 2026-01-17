@@ -20,28 +20,29 @@ bitflags! {
         const STORY_ESCAPED_CORPORATE = 0b1 << 1;
 
         // Upgraded rod
-        const SHOP_UPGRADED_ROD = 0b1 << 3;
-        const BOUGHT_UPGRADED_ROD = 0b1 << 4;
+        const SHOP_UPGRADED_ROD = 0b1 << 2;
+        const BOUGHT_UPGRADED_ROD = 0b1 << 3;
+
+        const SHOP_CARBON_RID = 0b1 << 4;
+        const BOUGHT_CARBON_RID = 0b1 << 5;
 
         // Upgraded bait
-        const SHOP_BASIC_BAIT = 0b1 << 5;
-        const BOUGHT_BASIC_BAIT = 0b1 << 6;
+        const SHOP_BASIC_BAIT = 0b1 << 6;
+        const BOUGHT_BASIC_BAIT = 0b1 << 7;
 
-        const SHOP_TASTY_BAIT = 0b1 << 9;
-        const BOUGHT_TASTY_BAIT = 0b1 << 10;
-
-        const SHOP_PREMIUM_BAIT = 0b1 << 11;
-        const BOUGHT_PREMIUM_BAIT = 0b1 << 12;
-
-        const SHOP_HEAVENLY_BAIT = 0b1 << 13;
-        const BOUGHT_HEAVENLY_BAIT = 0b1 << 14;
+        const SHOP_PREMIUM_BAIT = 0b1 << 8;
+        const BOUGHT_PREMIUM_BAIT = 0b1 << 9;
 
         // Upgraded rates
-        const SHOP_BETTER_RATES = 0b1 << 7;
-        const BOUGHT_BETTER_RATES = 0b1 << 8;
+        const SHOP_BETTER_RATES = 0b1 << 10;
+        const BOUGHT_BETTER_RATES = 0b1 << 11;
+
+        const SHOP_BEST_RATES = 0b1 << 12;
+        const BOUGHT_BEST_RATES = 0b1 << 13;
 
         // Final objective
-        const KING_STATUS = 0b1 << 15;
+        const SHOP_KING_STATUS = 0b1 << 14;
+        const BOUGHT_KING_STATUS = 0b1 << 15;
     }
 }
 

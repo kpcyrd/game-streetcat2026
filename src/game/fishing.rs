@@ -292,7 +292,7 @@ impl Fishing {
             self.render_dumpster(display);
 
             // The cat position
-            if campaign.unlocks.contains(Unlocks::KING_STATUS) {
+            if campaign.unlocks.contains(Unlocks::BOUGHT_KING_STATUS) {
                 STANDARD_CAT_POSITION + gfx::CROWN_CAT_OFFSET
             } else {
                 STANDARD_CAT_POSITION
@@ -328,7 +328,7 @@ impl Fishing {
         Image::new(&gfx::CAT, cat_point).draw(display).ok();
 
         // King status
-        if campaign.unlocks.contains(Unlocks::KING_STATUS) {
+        if campaign.unlocks.contains(Unlocks::BOUGHT_KING_STATUS) {
             Image::new(
                 &gfx::CROWN,
                 STANDARD_CAT_POSITION + gfx::CROWN_CAT_OFFSET + gfx::CROWN_OFFSET,

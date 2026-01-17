@@ -60,7 +60,7 @@ fn main() -> ! {
     if option_env!("BOOT_GAME").is_some() {
         game = Game::fishing(game::fishing::Timer::Onboarding);
         campaign.unlocks.insert(Unlocks::STORY_ESCAPED_CORPORATE);
-        campaign.unlocks.insert(Unlocks::KING_STATUS);
+        campaign.unlocks.insert(Unlocks::BOUGHT_KING_STATUS);
         campaign
             .acknowledged_scenes
             .insert(Unlocks::STORY_ESCAPED_CORPORATE);

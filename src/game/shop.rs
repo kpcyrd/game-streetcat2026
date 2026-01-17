@@ -18,14 +18,13 @@ const ITEM_LEFT_PAD: i32 = CURSOR_LEFT_PAD + gfx::FONT_WIDTH * 6;
 const MAX_ITEM_NAME: usize = 13;
 
 const SHOP_MENU: &[&[ShopItem]] = &[
-    &[ShopItem::UpgradedRod],
+    &[ShopItem::UpgradedRod, ShopItem::CarbonRod],
+    &[ShopItem::BasicBait, ShopItem::PremiumBait],
     &[
-        ShopItem::BasicBait,
-        ShopItem::TastyBait,
-        ShopItem::PremiumBait,
-        ShopItem::HeavenlyBait,
+        ShopItem::BetterRates,
+        ShopItem::BestRates,
+        ShopItem::KingStatus,
     ],
-    &[ShopItem::BetterRates, ShopItem::KingStatus],
 ];
 
 // Sanity checks
@@ -51,13 +50,13 @@ const _: () = const {
 pub enum ShopItem {
     // Slot 1
     UpgradedRod,
+    CarbonRod,
     // Slot 2
     BasicBait,
-    TastyBait,
     PremiumBait,
-    HeavenlyBait,
     // Slot 3
     BetterRates,
+    BestRates,
     KingStatus,
 }
 
@@ -66,13 +65,13 @@ impl ShopItem {
         match self {
             // Slot 1
             ShopItem::UpgradedRod => 100,
+            ShopItem::CarbonRod => 300,
             // Slot 2
             ShopItem::BasicBait => 50,
-            ShopItem::TastyBait => 75,
             ShopItem::PremiumBait => 150,
-            ShopItem::HeavenlyBait => 300,
             // Slot 3
             ShopItem::BetterRates => 200,
+            ShopItem::BestRates => 500,
             ShopItem::KingStatus => 9_999,
         }
     }
@@ -81,13 +80,13 @@ impl ShopItem {
         match self {
             // Slot 1
             ShopItem::UpgradedRod => "Upgraded Rod",
+            ShopItem::CarbonRod => "Carbon Rod",
             // Slot 2
             ShopItem::BasicBait => "Basic Bait",
-            ShopItem::TastyBait => "Tasty Bait",
             ShopItem::PremiumBait => "Premium Bait",
-            ShopItem::HeavenlyBait => "Heavenly Bait",
             // Slot 3
             ShopItem::BetterRates => "Better Rates",
+            ShopItem::BestRates => "Best Rates",
             ShopItem::KingStatus => "King Status",
         }
     }
@@ -96,29 +95,29 @@ impl ShopItem {
         match self {
             // Slot 1
             ShopItem::UpgradedRod => Unlocks::SHOP_UPGRADED_ROD,
+            ShopItem::CarbonRod => Unlocks::SHOP_CARBON_RID,
             // Slot 2
             ShopItem::BasicBait => Unlocks::SHOP_BASIC_BAIT,
-            ShopItem::TastyBait => Unlocks::SHOP_TASTY_BAIT,
             ShopItem::PremiumBait => Unlocks::SHOP_PREMIUM_BAIT,
-            ShopItem::HeavenlyBait => Unlocks::SHOP_HEAVENLY_BAIT,
             // Slot 3
             ShopItem::BetterRates => Unlocks::SHOP_BETTER_RATES,
-            ShopItem::KingStatus => Unlocks::BOUGHT_BETTER_RATES,
+            ShopItem::BestRates => Unlocks::SHOP_BEST_RATES,
+            ShopItem::KingStatus => Unlocks::SHOP_KING_STATUS,
         }
     }
 
-    pub const fn unlocks(&self) -> Unlocks {
+    pub const fn purchased(&self) -> Unlocks {
         match self {
             // Slot 1
             ShopItem::UpgradedRod => Unlocks::BOUGHT_UPGRADED_ROD,
+            ShopItem::CarbonRod => Unlocks::BOUGHT_CARBON_RID,
             // Slot 2
             ShopItem::BasicBait => Unlocks::BOUGHT_BASIC_BAIT,
-            ShopItem::TastyBait => Unlocks::BOUGHT_TASTY_BAIT,
             ShopItem::PremiumBait => Unlocks::BOUGHT_PREMIUM_BAIT,
-            ShopItem::HeavenlyBait => Unlocks::BOUGHT_HEAVENLY_BAIT,
             // Slot 3
             ShopItem::BetterRates => Unlocks::BOUGHT_BETTER_RATES,
-            ShopItem::KingStatus => Unlocks::KING_STATUS,
+            ShopItem::BestRates => Unlocks::BOUGHT_BEST_RATES,
+            ShopItem::KingStatus => Unlocks::BOUGHT_KING_STATUS,
         }
     }
 
@@ -128,7 +127,7 @@ impl ShopItem {
         let mut current = None;
         for item in *items {
             if unlocks.contains(item.depends()) {
-                let price = if unlocks.contains(item.unlocks()) {
+                let price = if unlocks.contains(item.purchased()) {
                     0
                 } else {
                     item.price()
@@ -159,7 +158,7 @@ impl Shop {
                     && let Some(new_balance) = campaign.money.checked_sub(price)
                 {
                     campaign.money = new_balance;
-                    campaign.unlocks.insert(item.unlocks());
+                    campaign.unlocks.insert(item.purchased());
                     campaign.write_savegame();
                 }
             }
@@ -187,7 +186,7 @@ impl Shop {
         } else if price < 100 {
             point.x += gfx::FONT_WIDTH * 2;
         } else if price < 1000 {
-            point.x += gfx::FONT_WIDTH * 1;
+            point.x += gfx::FONT_WIDTH;
         }
 
         // Render price
