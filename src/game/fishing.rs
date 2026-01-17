@@ -21,9 +21,12 @@ use embedded_savegame::storage::Flash;
 
 const ESCAPE_THRESHOLD: i16 = -20;
 // Align the max with the RNG mask for good distribution
-const RNG_MASK: u32 = 0xFF;
+const SPAWN_RNG_MASK: u32 = 0xFF;
 const MAX_WAIT_DURATION: i16 = 90;
 // const MAX_WAIT_DURATION: i16 = 12;
+
+// The range of random numbers when rolling loot
+const LOOT_RNG_MASK: u32 = 0xFF;
 
 // With i16::MIN the fish would immediately escape, resetting the timer
 // But with the email mingame, we want to start with a reasonable timer.
@@ -119,7 +122,7 @@ impl Fishing {
 
     pub fn setup_spawn_timer<F: Flash>(&mut self, campaign: &mut Campaign<F>) {
         campaign.feed_rng();
-        let num = ((campaign.rng & RNG_MASK) as i16 + 1) << 1;
+        let num = ((campaign.rng & SPAWN_RNG_MASK) as i16 + 1) << 1;
         self.spawn_timer = cmp::min(num, MAX_WAIT_DURATION);
     }
 
@@ -152,18 +155,68 @@ impl Fishing {
         } else if !campaign.unlocks.contains(Unlocks::BOUGHT_BASIC_BAIT) {
             Loot::Bones
         } else {
-            let num = (campaign.rng & RNG_MASK) as u16;
+            let num = (campaign.rng & LOOT_RNG_MASK) as u16;
 
-            if num < 15 {
-                Loot::Bones
-            } else if num < 252 {
-                skillcheck = Some(skillcheck::MEDIUM);
-                Loot::Fish
+            // Determine loot based on RNG and upgrades
+            let mut loot = if campaign.unlocks.contains(Unlocks::BOUGHT_CARBON_ROD) {
+                if num < 5 {
+                    Loot::Bones
+                } else if num < 50 {
+                    Loot::BestFish
+                } else if num < 200 {
+                    Loot::BetterFish
+                } else {
+                    Loot::Fish
+                }
+            } else if campaign.unlocks.contains(Unlocks::BOUGHT_BAMBOO_ROD) {
+                if num < 10 {
+                    Loot::Bones
+                } else if num < 20 {
+                    Loot::BestFish
+                } else if num < 100 {
+                    Loot::BetterFish
+                } else {
+                    Loot::Fish
+                }
             } else {
-                // This should only be possible with the best tools/bait
-                skillcheck = Some(skillcheck::HARD);
-                Loot::BestFish
+                // Basic rod
+                if num <= 25 { Loot::Bones } else { Loot::Fish }
+            };
+
+            // Check for maxed out bait
+            if loot == Loot::BestFish && !campaign.unlocks.contains(Unlocks::BOUGHT_PREMIUM_BAIT) {
+                loot = Loot::Fish;
             }
+
+            // Determine skillcheck based on hook upgrades
+            skillcheck = if campaign.unlocks.contains(Unlocks::BOUGHT_TWIST_HOOK) {
+                match loot {
+                    Loot::Key => None,
+                    Loot::Bones => None,
+                    Loot::Fish => Some(skillcheck::EASY),
+                    Loot::BetterFish => Some(skillcheck::MEDIUM),
+                    Loot::BestFish => Some(skillcheck::HARD),
+                }
+            } else if campaign.unlocks.contains(Unlocks::BOUGHT_CATCHY_HOOK) {
+                match loot {
+                    Loot::Key => None,
+                    Loot::Bones => None,
+                    Loot::Fish => Some(skillcheck::MEDIUM),
+                    Loot::BetterFish => Some(skillcheck::HARD),
+                    Loot::BestFish => Some(skillcheck::IMPOSSIBLE),
+                }
+            } else {
+                match loot {
+                    Loot::Key => None,
+                    Loot::Bones => None,
+                    Loot::Fish => Some(skillcheck::HARD),
+                    Loot::BetterFish => Some(skillcheck::IMPOSSIBLE),
+                    Loot::BestFish => Some(skillcheck::IMPOSSIBLE),
+                }
+            };
+
+            // Return determined loot
+            loot
         };
         (loot, skillcheck)
     }

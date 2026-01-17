@@ -20,8 +20,8 @@ bitflags! {
         const STORY_ESCAPED_CORPORATE = 0b1 << 1;
 
         // Upgraded rod
-        const SHOP_UPGRADED_ROD = 0b1 << 2;
-        const BOUGHT_UPGRADED_ROD = 0b1 << 3;
+        const SHOP_BAMBOO_ROD = 0b1 << 2;
+        const BOUGHT_BAMBOO_ROD = 0b1 << 3;
 
         const SHOP_CARBON_ROD = 0b1 << 4;
         const BOUGHT_CARBON_ROD = 0b1 << 5;
@@ -34,11 +34,11 @@ bitflags! {
         const BOUGHT_PREMIUM_BAIT = 0b1 << 9;
 
         // Upgraded rates
-        const SHOP_BETTER_RATES = 0b1 << 10;
-        const BOUGHT_BETTER_RATES = 0b1 << 11;
+        const SHOP_CATCHY_HOOK = 0b1 << 10;
+        const BOUGHT_CATCHY_HOOK = 0b1 << 11;
 
-        const SHOP_BEST_RATES = 0b1 << 12;
-        const BOUGHT_BEST_RATES = 0b1 << 13;
+        const SHOP_TWIST_HOOK = 0b1 << 12;
+        const BOUGHT_TWIST_HOOK = 0b1 << 13;
 
         // Final objective
         const SHOP_KING_STATUS = 0b1 << 14;
@@ -49,7 +49,7 @@ bitflags! {
 impl Unlocks {
     /// The first unlocked shop item
     pub const fn first_shop_unlock() -> Unlocks {
-        Unlocks::SHOP_UPGRADED_ROD
+        Unlocks::SHOP_BAMBOO_ROD
     }
 
     pub fn next_unlock(&self) -> Option<Unlocks> {

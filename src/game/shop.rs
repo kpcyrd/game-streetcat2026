@@ -19,11 +19,11 @@ const ITEM_LEFT_PAD: i32 = CURSOR_LEFT_PAD + gfx::FONT_WIDTH * 6;
 const MAX_ITEM_NAME: usize = 13;
 
 const SHOP_MENU: &[&[ShopItem]] = &[
-    &[ShopItem::UpgradedRod, ShopItem::CarbonRod],
+    &[ShopItem::BambooRod, ShopItem::CarbonRod],
     &[ShopItem::BasicBait, ShopItem::PremiumBait],
     &[
-        ShopItem::BetterRates,
-        ShopItem::BestRates,
+        ShopItem::CatchyHook,
+        ShopItem::TwistHook,
         ShopItem::KingStatus,
     ],
 ];
@@ -50,14 +50,14 @@ const _: () = const {
 #[derive(Debug, Clone, Copy, Sequence)]
 pub enum ShopItem {
     // Slot 1
-    UpgradedRod,
+    BambooRod,
     CarbonRod,
     // Slot 2
     BasicBait,
     PremiumBait,
     // Slot 3
-    BetterRates,
-    BestRates,
+    CatchyHook,
+    TwistHook,
     KingStatus,
 }
 
@@ -65,14 +65,14 @@ impl ShopItem {
     pub const fn price(&self) -> u16 {
         match self {
             // Slot 1
-            ShopItem::UpgradedRod => 100,
+            ShopItem::BambooRod => 100,
             ShopItem::CarbonRod => 300,
             // Slot 2
             ShopItem::BasicBait => 50,
             ShopItem::PremiumBait => 150,
             // Slot 3
-            ShopItem::BetterRates => 200,
-            ShopItem::BestRates => 500,
+            ShopItem::CatchyHook => 200,
+            ShopItem::TwistHook => 500,
             ShopItem::KingStatus => 9_999,
         }
     }
@@ -80,14 +80,14 @@ impl ShopItem {
     pub const fn text(&self) -> &'static str {
         match self {
             // Slot 1
-            ShopItem::UpgradedRod => "Upgraded Rod",
+            ShopItem::BambooRod => "Bamboo Rod",
             ShopItem::CarbonRod => "Carbon Rod",
             // Slot 2
             ShopItem::BasicBait => "Basic Bait",
             ShopItem::PremiumBait => "Premium Bait",
             // Slot 3
-            ShopItem::BetterRates => "Better Rates",
-            ShopItem::BestRates => "Best Rates",
+            ShopItem::CatchyHook => "Catchy Hook",
+            ShopItem::TwistHook => "Twist Hook",
             ShopItem::KingStatus => "King Status",
         }
     }
@@ -95,31 +95,31 @@ impl ShopItem {
     pub const fn unlocks_after(&self) -> Unlocks {
         match self {
             // Slot 1
-            ShopItem::UpgradedRod => Unlocks::empty(),
-            ShopItem::CarbonRod => Unlocks::BOUGHT_UPGRADED_ROD.union(Unlocks::BOUGHT_BASIC_BAIT),
+            ShopItem::BambooRod => Unlocks::empty(),
+            ShopItem::CarbonRod => Unlocks::BOUGHT_BAMBOO_ROD.union(Unlocks::BOUGHT_BASIC_BAIT),
             // Slot 2
-            ShopItem::BasicBait => Unlocks::SHOP_UPGRADED_ROD,
-            ShopItem::PremiumBait => Unlocks::BOUGHT_BASIC_BAIT.union(Unlocks::SHOP_BETTER_RATES),
+            ShopItem::BasicBait => Unlocks::SHOP_BAMBOO_ROD,
+            ShopItem::PremiumBait => Unlocks::BOUGHT_BASIC_BAIT.union(Unlocks::SHOP_CATCHY_HOOK),
             // Slot 3
-            ShopItem::BetterRates => Unlocks::SHOP_BASIC_BAIT,
-            ShopItem::BestRates => Unlocks::BOUGHT_BETTER_RATES.union(Unlocks::BOUGHT_PREMIUM_BAIT),
+            ShopItem::CatchyHook => Unlocks::SHOP_BASIC_BAIT,
+            ShopItem::TwistHook => Unlocks::BOUGHT_CATCHY_HOOK.union(Unlocks::BOUGHT_PREMIUM_BAIT),
             ShopItem::KingStatus => Unlocks::BOUGHT_CARBON_ROD
                 .union(Unlocks::BOUGHT_PREMIUM_BAIT)
-                .union(Unlocks::BOUGHT_BEST_RATES),
+                .union(Unlocks::BOUGHT_TWIST_HOOK),
         }
     }
 
     pub const fn unlocked(&self) -> Unlocks {
         match self {
             // Slot 1
-            ShopItem::UpgradedRod => Unlocks::SHOP_UPGRADED_ROD,
+            ShopItem::BambooRod => Unlocks::SHOP_BAMBOO_ROD,
             ShopItem::CarbonRod => Unlocks::SHOP_CARBON_ROD,
             // Slot 2
             ShopItem::BasicBait => Unlocks::SHOP_BASIC_BAIT,
             ShopItem::PremiumBait => Unlocks::SHOP_PREMIUM_BAIT,
             // Slot 3
-            ShopItem::BetterRates => Unlocks::SHOP_BETTER_RATES,
-            ShopItem::BestRates => Unlocks::SHOP_BEST_RATES,
+            ShopItem::CatchyHook => Unlocks::SHOP_CATCHY_HOOK,
+            ShopItem::TwistHook => Unlocks::SHOP_TWIST_HOOK,
             ShopItem::KingStatus => Unlocks::SHOP_KING_STATUS,
         }
     }
@@ -127,14 +127,14 @@ impl ShopItem {
     pub const fn purchased(&self) -> Unlocks {
         match self {
             // Slot 1
-            ShopItem::UpgradedRod => Unlocks::BOUGHT_UPGRADED_ROD,
+            ShopItem::BambooRod => Unlocks::BOUGHT_BAMBOO_ROD,
             ShopItem::CarbonRod => Unlocks::BOUGHT_CARBON_ROD,
             // Slot 2
             ShopItem::BasicBait => Unlocks::BOUGHT_BASIC_BAIT,
             ShopItem::PremiumBait => Unlocks::BOUGHT_PREMIUM_BAIT,
             // Slot 3
-            ShopItem::BetterRates => Unlocks::BOUGHT_BETTER_RATES,
-            ShopItem::BestRates => Unlocks::BOUGHT_BEST_RATES,
+            ShopItem::CatchyHook => Unlocks::BOUGHT_CATCHY_HOOK,
+            ShopItem::TwistHook => Unlocks::BOUGHT_TWIST_HOOK,
             ShopItem::KingStatus => Unlocks::BOUGHT_KING_STATUS,
         }
     }
