@@ -23,8 +23,8 @@ bitflags! {
         const SHOP_UPGRADED_ROD = 0b1 << 2;
         const BOUGHT_UPGRADED_ROD = 0b1 << 3;
 
-        const SHOP_CARBON_RID = 0b1 << 4;
-        const BOUGHT_CARBON_RID = 0b1 << 5;
+        const SHOP_CARBON_ROD = 0b1 << 4;
+        const BOUGHT_CARBON_ROD = 0b1 << 5;
 
         // Upgraded bait
         const SHOP_BASIC_BAIT = 0b1 << 6;
@@ -52,16 +52,23 @@ impl Unlocks {
         Unlocks::SHOP_UPGRADED_ROD
     }
 
-    pub const fn next_unlock(&self) -> Option<Unlocks> {
-        if !self.contains(Unlocks::SHOP_UPGRADED_ROD) {
-            Some(Unlocks::SHOP_UPGRADED_ROD)
-        } else if !self.contains(Unlocks::SHOP_BASIC_BAIT) {
-            Some(Unlocks::SHOP_BASIC_BAIT)
-        } else if !self.contains(Unlocks::SHOP_BETTER_RATES) {
-            Some(Unlocks::SHOP_BETTER_RATES)
-        } else {
-            None
+    pub fn next_unlock(&self) -> Option<Unlocks> {
+        for item in enum_iterator::all::<shop::ShopItem>() {
+            if self.contains(item.unlocked()) {
+                // Already unlocked
+                continue;
+            }
+
+            if !self.contains(item.unlocks_after()) {
+                // Pre-conditions not met yet
+                continue;
+            }
+
+            return Some(item.unlocked());
         }
+
+        // No unlock currently available
+        None
     }
 
     pub fn unlock_next(&mut self) {

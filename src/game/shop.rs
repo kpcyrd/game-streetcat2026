@@ -10,6 +10,7 @@ use embedded_graphics::{
     prelude::{DrawTarget, Point},
 };
 use embedded_savegame::storage::Flash;
+use enum_iterator::Sequence;
 
 const MENU_LIMIT: usize = 3;
 const CURSOR_LEFT_PAD: i32 = gfx::FONT_WIDTH * 2;
@@ -46,7 +47,7 @@ const _: () = const {
     }
 };
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Sequence)]
 pub enum ShopItem {
     // Slot 1
     UpgradedRod,
@@ -91,11 +92,28 @@ impl ShopItem {
         }
     }
 
-    pub const fn depends(&self) -> Unlocks {
+    pub const fn unlocks_after(&self) -> Unlocks {
+        match self {
+            // Slot 1
+            ShopItem::UpgradedRod => Unlocks::empty(),
+            ShopItem::CarbonRod => Unlocks::BOUGHT_UPGRADED_ROD.union(Unlocks::BOUGHT_BASIC_BAIT),
+            // Slot 2
+            ShopItem::BasicBait => Unlocks::SHOP_UPGRADED_ROD,
+            ShopItem::PremiumBait => Unlocks::BOUGHT_BASIC_BAIT.union(Unlocks::SHOP_BETTER_RATES),
+            // Slot 3
+            ShopItem::BetterRates => Unlocks::SHOP_BASIC_BAIT,
+            ShopItem::BestRates => Unlocks::BOUGHT_BETTER_RATES.union(Unlocks::BOUGHT_PREMIUM_BAIT),
+            ShopItem::KingStatus => Unlocks::BOUGHT_CARBON_ROD
+                .union(Unlocks::BOUGHT_PREMIUM_BAIT)
+                .union(Unlocks::BOUGHT_BEST_RATES),
+        }
+    }
+
+    pub const fn unlocked(&self) -> Unlocks {
         match self {
             // Slot 1
             ShopItem::UpgradedRod => Unlocks::SHOP_UPGRADED_ROD,
-            ShopItem::CarbonRod => Unlocks::SHOP_CARBON_RID,
+            ShopItem::CarbonRod => Unlocks::SHOP_CARBON_ROD,
             // Slot 2
             ShopItem::BasicBait => Unlocks::SHOP_BASIC_BAIT,
             ShopItem::PremiumBait => Unlocks::SHOP_PREMIUM_BAIT,
@@ -110,7 +128,7 @@ impl ShopItem {
         match self {
             // Slot 1
             ShopItem::UpgradedRod => Unlocks::BOUGHT_UPGRADED_ROD,
-            ShopItem::CarbonRod => Unlocks::BOUGHT_CARBON_RID,
+            ShopItem::CarbonRod => Unlocks::BOUGHT_CARBON_ROD,
             // Slot 2
             ShopItem::BasicBait => Unlocks::BOUGHT_BASIC_BAIT,
             ShopItem::PremiumBait => Unlocks::BOUGHT_PREMIUM_BAIT,
@@ -126,7 +144,7 @@ impl ShopItem {
 
         let mut current = None;
         for item in *items {
-            if unlocks.contains(item.depends()) {
+            if unlocks.contains(item.unlocked()) {
                 let price = if unlocks.contains(item.purchased()) {
                     0
                 } else {

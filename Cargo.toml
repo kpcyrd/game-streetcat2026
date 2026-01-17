@@ -31,6 +31,7 @@ embedded-graphics = "0.8.1"
 embedded-hal = "1.0.0"
 embedded-hal-bus = "0.3.0"
 embedded-savegame = { version = "0.3", features = ["eeprom24x"] }
+enum-iterator = "2.3.0"
 itoa = "1.0.17"
 panic-halt = "1.0.0"
 qingke = "0.6.1"
