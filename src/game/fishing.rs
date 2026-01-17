@@ -22,8 +22,8 @@ use embedded_savegame::storage::Flash;
 const ESCAPE_THRESHOLD: i16 = -20;
 // Align the max with the RNG mask for good distribution
 const RNG_MASK: u32 = 0xFF;
-// const MAX_WAIT_DURATION: i16 = 120;
-const MAX_WAIT_DURATION: i16 = 12;
+const MAX_WAIT_DURATION: i16 = 90;
+// const MAX_WAIT_DURATION: i16 = 12;
 
 // With i16::MIN the fish would immediately escape, resetting the timer
 // But with the email mingame, we want to start with a reasonable timer.
