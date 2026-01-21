@@ -1,12 +1,14 @@
-```
-hello world                 1592 bytes
-+i2c                        2016 bytes
-+at24cxx (read)             2568 bytes
-+at24cxx (write)            2856 bytes
-+ssd1306                    4712 bytes
-+embedded graphics          7228 bytes
-```
+# game-streetcat2026
+
+Bill of materials:
+
+- [ch32v003](https://github.com/kpcyrd/ch32v003-demo)
+- ssd1306
+- at24c256
+- 4 buttons
+
+## License
 
 ```
-hello world with SDIPrint   2764 bytes
+GPL-3.0-or-later
 ```
