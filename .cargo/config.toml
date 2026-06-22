@@ -10,3 +10,4 @@ runner = "wlink flash"
 
 [unstable]
 build-std = ["core"]
+json-target-spec = true
